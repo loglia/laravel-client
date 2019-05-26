@@ -1,0 +1,24 @@
+{
+    "name": "retrospekt/laravel-client",
+    "description": "For sending logs and such.",
+    "homepage": "https://retrospekt.app",
+    "type": "library",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Retrospekt\\LaravelClient\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Retrospekt\\LaravelClient\\LaravelClientServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "prefer-stable": true
+}
