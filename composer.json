@@ -4,7 +4,10 @@
     "homepage": "https://retrospekt.app",
     "type": "library",
     "license": "MIT",
-    "require": {},
+    "require": {
+        "php": ">=5.4.0",
+        "ext-json": "*"
+    },
     "autoload": {
         "psr-4": {
             "Retrospekt\\LaravelClient\\": "src"
