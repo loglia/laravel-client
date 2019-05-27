@@ -17,5 +17,7 @@ class RetrospektHandler extends AbstractProcessingHandler
 
         // TODO: do the cURL stuff to send the log message. Perhaps use adapters so the user is able to configure which
         // driver they want to use. sync, async, etc.
+
+        // TODO: add User-Agent header of `Retrospekt Laravel Client {version}`. use getVersion() on SP
     }
 }
