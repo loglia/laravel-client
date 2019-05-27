@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelClientServiceProvider extends ServiceProvider
 {
+    const VERSION = '1.0.0';
+
     public function boot()
     {
         $this->publishes([
@@ -16,5 +18,15 @@ class LaravelClientServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/retrospekt.php', 'retrospekt');
+    }
+
+    /**
+     * Returns the version of the Retrospekt Laravel client.
+     *
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return static::VERSION;
     }
 }

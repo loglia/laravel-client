@@ -15,7 +15,13 @@ class RetrospektFormatter extends NormalizerFormatter
 
         // TODO: move exceptions to --retrospekt
 
-        return json_encode($normalized);
+        $encoded = json_encode($normalized);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Unable to serialize log message as JSON');
+        }
+
+        return $encoded;
     }
 
     /**
