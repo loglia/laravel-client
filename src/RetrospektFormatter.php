@@ -13,15 +13,11 @@ class RetrospektFormatter extends NormalizerFormatter
     {
         $normalized = $this->normalize($record);
 
-        // TODO: move exceptions to --retrospekt
-
-        $encoded = json_encode($normalized);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('Unable to serialize log message as JSON');
+        if ($this->recordHasException($record)) {
+            $normalized = $this->moveExceptionToExtra($normalized);
         }
 
-        return $encoded;
+        return $this->serializeToJson($normalized);
     }
 
     /**
@@ -34,6 +30,44 @@ class RetrospektFormatter extends NormalizerFormatter
         }
 
         return $records;
+    }
+
+    /**
+     * Determines if the record has an exception in its context data.
+     *
+     * @param array $record
+     * @return bool
+     */
+    private function recordHasException(array $record)
+    {
+        if (empty($record['context']['exception'])) {
+            return false;
+        }
+
+        if (! $record['context']['exception'] instanceof \Exception) {
+            return false;
+        }
+
+        if (! (PHP_VERSION_ID > 70000 && $record['context']['exception'] instanceof \Throwable)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Moves an exception from the context data to the extra data.
+     *
+     * @param array $record
+     * @return array
+     */
+    private function moveExceptionToExtra(array $record)
+    {
+        $record['extra']['--retrospekt']['exception'] = $record['context']['exception'];
+
+        unset($record['context']['exception']);
+
+        return $record;
     }
 
     /**
@@ -125,5 +159,23 @@ class RetrospektFormatter extends NormalizerFormatter
             'file' => $file,
             'line' => $line
         ];
+    }
+
+    /**
+     * Serializes the formatted log to JSON.
+     *
+     * @param array $record
+     * @return string
+     * @throws RetrospektException
+     */
+    private function serializeToJson(array $record)
+    {
+        $encoded = json_encode($record);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RetrospektException('Unable to serialize log message as JSON');
+        }
+
+        return $encoded;
     }
 }

@@ -13,7 +13,7 @@ class RetrospektHandler extends AbstractProcessingHandler
      */
     public function write(array $record)
     {
-        dd('record being sent:', $record);
+        dd('formatted record being sent:', json_decode($record['formatted'], true));
 
         // TODO: do the cURL stuff to send the log message. Perhaps use adapters so the user is able to configure which
         // driver they want to use. sync, async, etc.
