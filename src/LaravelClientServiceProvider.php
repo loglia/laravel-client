@@ -19,14 +19,4 @@ class LaravelClientServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/retrospekt.php', 'retrospekt');
     }
-
-    /**
-     * Returns the version of the Retrospekt Laravel client.
-     *
-     * @return string
-     */
-    public static function getVersion()
-    {
-        return static::VERSION;
-    }
 }
