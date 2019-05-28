@@ -7,6 +7,12 @@ use Monolog\Handler\AbstractProcessingHandler;
 class RetrospektHandler extends AbstractProcessingHandler
 {
     /**
+     * Logging payloads above this size will not be sent.
+     * Currently 5 MiB.
+     */
+    const MAX_PAYLOAD_SIZE = 5242880;
+
+    /**
      * The endpoint to send logs to.
      *
      * @var string
@@ -27,14 +33,35 @@ class RetrospektHandler extends AbstractProcessingHandler
      * Sends the log message to Retrospekt.
      *
      * @param array $record
+     * @throws RetrospektException
      */
     public function write(array $record)
     {
+        $this->checkPayloadSize($record);
+
         // TODO: gzip payload
-        // TODO: check size of payload, if too big, don't send
         $this->send($record['formatted']);
 
         dd('Record was sent', json_decode($record['formatted'], true));
+    }
+
+    /**
+     * Throws an exception if the logging payload is too large to be sent to Retrospekt.
+     *
+     * @param array $record
+     * @throws RetrospektException
+     */
+    private function checkPayloadSize(array $record)
+    {
+        if ($size = strlen($record['formatted']) > static::MAX_PAYLOAD_SIZE) {
+            throw new RetrospektException(
+                sprintf(
+                    'Logging payload too large. Must be %d bytes or less, was %d bytes',
+                    static::MAX_PAYLOAD_SIZE,
+                    $size
+                )
+            );
+        }
     }
 
     /**
