@@ -13,11 +13,11 @@ class RetrospektHandler extends AbstractProcessingHandler
      */
     public function write(array $record)
     {
+        // TODO: gzip payload
+        // TODO: check size of payload, if too big, don't send
         $this->send($record['formatted']);
 
-        dd('formatted record being sent:', json_decode($record['formatted'], true));
-
-        // TODO: add User-Agent header of `Retrospekt Laravel Client {version}`. use getVersion() on SP
+        dd('Record was sent', json_decode($record['formatted'], true));
     }
 
     /**
