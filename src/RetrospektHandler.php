@@ -7,6 +7,23 @@ use Monolog\Handler\AbstractProcessingHandler;
 class RetrospektHandler extends AbstractProcessingHandler
 {
     /**
+     * The endpoint to send logs to.
+     *
+     * @var string
+     */
+    private $endpoint = 'https://logs.retrospekt.io';
+
+    /**
+     * Allows the endpoint to send logs to be overridden if desired (e.g. for testing purposes).
+     *
+     * @param string $endpoint
+     */
+    public function setEndpoint($endpoint)
+    {
+        $this->endpoint = $endpoint;
+    }
+
+    /**
      * Sends the log message to Retrospekt.
      *
      * @param array $record
@@ -34,7 +51,7 @@ class RetrospektHandler extends AbstractProcessingHandler
             '-X POST',
             '-d',
             escapeshellarg($postData),
-            'http://requestbin.fullcontact.com/vx5gfhvx',      // TODO: make this configurable, but dont put in config file
+            $this->endpoint,
             '> /dev/null 2>&1 &'
         ];
 
