@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Tests\Unit;
+namespace Retrospekt\LaravelClient\Tests\Unit\Monolog;
 
 use PHPUnit\Framework\TestCase;
 

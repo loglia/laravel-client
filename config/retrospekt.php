@@ -8,5 +8,5 @@ return [
     'api_key' => env('RETROSPEKT_API_KEY'),
 
     // not in real config file, overridden for development
-    'endpoint' => 'https://requestbin.fullcontact.com/vx5gfhvx'
+    'endpoint' => 'http://requestbin.fullcontact.com/150nfzy1'
 ];
