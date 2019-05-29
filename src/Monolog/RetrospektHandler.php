@@ -85,7 +85,7 @@ class RetrospektHandler extends AbstractProcessingHandler
      * @param $postData
      * @return string
      */
-    private function send($postData): string
+    private function send($postData)
     {
         $parts = [
             'curl',
