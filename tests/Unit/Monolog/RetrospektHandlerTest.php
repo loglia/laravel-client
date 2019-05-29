@@ -84,9 +84,9 @@ class RetrospektHandlerTest extends TestCase
             'channel' => 'local',
             'datetime' => new \DateTime,
             'extra' => [],
-            'formatted' => '{"unicode", "👍"}'
+            'formatted' => '{"unicode", "§Ĭɮڡউ█👍"}'
         ]);
 
-        $this->assertSame("curl -A 'Retrospekt Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"👍\"}' https://logs.retrospekt.io > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -A 'Retrospekt Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.retrospekt.io > /dev/null 2>&1 &", $cmd);
     }
 }
