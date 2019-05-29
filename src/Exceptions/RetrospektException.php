@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient;
+namespace Retrospekt\LaravelClient\Exceptions;
 
 class RetrospektException extends \Exception
 {

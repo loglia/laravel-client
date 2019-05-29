@@ -3,6 +3,7 @@
 namespace Retrospekt\LaravelClient;
 
 use Monolog\Formatter\NormalizerFormatter;
+use Retrospekt\LaravelClient\Exceptions\RetrospektException;
 
 class RetrospektFormatter extends NormalizerFormatter
 {
@@ -77,11 +78,12 @@ class RetrospektFormatter extends NormalizerFormatter
      *
      * @param \Exception|\Throwable $e
      * @return array
+     * @throws RetrospektException
      */
     protected function normalizeException($e)
     {
         if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected');
+            throw new RetrospektException('Exception/Throwable expected');
         }
 
         $exception = [

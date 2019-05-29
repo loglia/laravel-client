@@ -3,6 +3,7 @@
 namespace Retrospekt\LaravelClient;
 
 use Monolog\Handler\AbstractProcessingHandler;
+use Retrospekt\LaravelClient\Exceptions\RetrospektException;
 
 class RetrospektHandler extends AbstractProcessingHandler
 {
