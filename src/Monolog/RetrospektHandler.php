@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient;
+namespace Retrospekt\LaravelClient\Monolog;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Retrospekt\LaravelClient\Exceptions\RetrospektException;

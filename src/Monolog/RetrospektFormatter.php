@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient;
+namespace Retrospekt\LaravelClient\Monolog;
 
 use Monolog\Formatter\NormalizerFormatter;
 use Retrospekt\LaravelClient\Exceptions\RetrospektException;

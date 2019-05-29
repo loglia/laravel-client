@@ -3,6 +3,8 @@
 namespace Retrospekt\LaravelClient;
 
 use Monolog\Logger;
+use Retrospekt\LaravelClient\Monolog\RetrospektHandler;
+use Retrospekt\LaravelClient\Monolog\RetrospektFormatter;
 
 class RetrospektLogger
 {
