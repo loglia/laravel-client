@@ -11,6 +11,8 @@ class RetrospektFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
+        // TODO: set timestamp in data, and ensure that it doesn't suffer from that weird rounding bug!!!
+
         $normalized = $this->normalize($record);
 
         if ($this->recordHasException($record)) {
