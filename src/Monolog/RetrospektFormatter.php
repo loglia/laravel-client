@@ -9,6 +9,7 @@ use Retrospekt\LaravelClient\Monolog\Formatting\RemoveLevelName;
 use Retrospekt\LaravelClient\Monolog\Formatting\MoveExceptionToExtra;
 use Retrospekt\LaravelClient\Monolog\Formatting\NormalizeContextData;
 use Retrospekt\LaravelClient\Monolog\Formatting\MoveDatetimeToTimestamp;
+use Retrospekt\LaravelClient\Monolog\Formatting\SerializeToJson;
 
 class RetrospektFormatter extends NormalizerFormatter
 {
@@ -17,7 +18,8 @@ class RetrospektFormatter extends NormalizerFormatter
         MoveDatetimeToTimestamp::class,
         RemoveLevelName::class,
         RemoveChannel::class,
-        MoveExceptionToExtra::class
+        MoveExceptionToExtra::class,
+        SerializeToJson::class
     ];
 
     /**
@@ -42,23 +44,5 @@ class RetrospektFormatter extends NormalizerFormatter
         }
 
         return $records;
-    }
-
-    /**
-     * Serializes the formatted log to JSON.
-     *
-     * @param array $record
-     * @return string
-     * @throws RetrospektException
-     */
-    private function serializeToJson(array $record)
-    {
-        $encoded = json_encode($record);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RetrospektException('Unable to serialize log message as JSON');
-        }
-
-        return $encoded;
     }
 }
