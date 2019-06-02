@@ -2,8 +2,6 @@
 
 namespace Retrospekt\LaravelClient\Monolog;
 
-use League\Pipeline\Pipeline;
-use League\Pipeline\PipelineBuilder;
 use Monolog\Formatter\NormalizerFormatter;
 use Retrospekt\LaravelClient\Exceptions\RetrospektException;
 use Retrospekt\LaravelClient\Monolog\Formatting\RemoveChannel;
