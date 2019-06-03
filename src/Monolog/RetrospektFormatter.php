@@ -31,7 +31,7 @@ class RetrospektFormatter extends NormalizerFormatter
             $record = (new $stage)($record);
         }
 
-        return $this->serializeToJson($record);
+        return $record;
     }
 
     /**

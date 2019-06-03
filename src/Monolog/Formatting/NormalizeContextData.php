@@ -2,6 +2,8 @@
 
 namespace Retrospekt\LaravelClient\Monolog\Formatting;
 
+use Retrospekt\LaravelClient\Exceptions\RetrospektException;
+
 class NormalizeContextData implements Formatter
 {
     /**
@@ -21,7 +23,7 @@ class NormalizeContextData implements Formatter
      * @param int $depth
      * @return array|string
      */
-    protected function normalize($data, $depth = 0)
+    private function normalize($data, $depth = 0)
     {
         if ($depth > 9) {
             return 'Over 9 levels deep, aborting normalization';
@@ -61,7 +63,6 @@ class NormalizeContextData implements Formatter
         }
 
         if (is_object($data)) {
-            // TODO 2.0 only check for Throwable
             if ($data instanceof Exception || (PHP_VERSION_ID > 70000 && $data instanceof \Throwable)) {
                 return $this->normalizeException($data);
             }
@@ -74,7 +75,7 @@ class NormalizeContextData implements Formatter
                 $value = $this->toJson($data, true);
             }
 
-            return sprintf("[object] (%s: %s)", Utils::getClass($data), $value);
+            return sprintf("[object] (%s: %s)", $this->getClass($data), $value);
         }
 
         if (is_resource($data)) {
@@ -91,7 +92,7 @@ class NormalizeContextData implements Formatter
      * @return array
      * @throws RetrospektException
      */
-    protected function normalizeException($e)
+    private function normalizeException($e)
     {
         if (!$e instanceof \Exception && !$e instanceof \Throwable) {
             throw new RetrospektException('Exception/Throwable expected');
@@ -174,5 +175,36 @@ class NormalizeContextData implements Formatter
             'file' => $file,
             'line' => $line
         ];
+    }
+
+    /**
+     * Serializes a context data property to JSON.
+     *
+     * @param $data
+     * @return false|string
+     * @throws RetrospektException
+     */
+    private function toJson($data)
+    {
+        $json = json_encode($data);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RetrospektException('Failed to serialize context data property to JSON');
+        }
+
+        return $json;
+    }
+
+    /**
+     * Gets the class of an object.
+     *
+     * @param $object
+     * @return string
+     */
+    private function getClass($object)
+    {
+        $class = \get_class($object);
+
+        return 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
     }
 }
