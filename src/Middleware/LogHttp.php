@@ -10,7 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class LogHttp
 {
-    private $took;
+    /**
+     * Holds the start time of the request. Used for calculating how long it took to return a response.
+     *
+     * @var int
+     */
+    private $start;
 
     /**
      * Handle an incoming request.
@@ -21,11 +26,9 @@ class LogHttp
      */
     public function handle($request, Closure $next)
     {
-        $start = microtime(true);
-        $response = $next($request);
-        $this->took = ceil((microtime(true) - $start) * 1000);
+        $this->start = microtime(true);
 
-        return $response;
+        return $next($request);
     }
 
     /**
@@ -65,30 +68,8 @@ class LogHttp
             'route' => $request->route()->uri,
             'method' => $request->method(),
             'client-ip' => $request->getClientIp(),
-            'headers' => $this->requestHeaders($request)
+            'headers' => $this->normalizeHeaders($request->headers->all())
         ];
-    }
-
-    /**
-     * Returns the HTTP request headers.
-     *
-     * @param Request $request
-     * @return array
-     */
-    private function requestHeaders(Request $request)
-    {
-        // TODO; refactor this and the response header stuff into a nice thing
-        $headerBlacklist = config('retrospekt.http.header_blacklist', []);
-
-        return collect($request->headers->all())
-            ->map(function ($value, $header) use ($headerBlacklist) {
-                if (in_array($header, $headerBlacklist)) {
-                    return '[redacted]';
-                }
-
-                return $value[0];
-            })
-            ->toArray();
     }
 
     /**
@@ -101,9 +82,9 @@ class LogHttp
     {
         return [
             'status' => $response->getStatusCode(),
-            'took' => $this->took,
+            'took' => ceil((microtime(true) - $this->start) * 1000),
             'size' => $this->responseSize($response),
-            'headers' => $this->responseHeaders($response)
+            'headers' => $this->normalizeHeaders($response->headers->all())
         ];
     }
 
@@ -123,16 +104,16 @@ class LogHttp
     }
 
     /**
-     * Returns the HTTP response headers.
+     * Normalizes request or response headers into a sane format, and applies the header blacklist.
      *
-     * @param Response $response
+     * @param array $headers
      * @return array
      */
-    private function responseHeaders(Response $response)
+    private function normalizeHeaders(array $headers)
     {
         $headerBlacklist = config('retrospekt.http.header_blacklist', []);
 
-        return collect($response->headers->all())
+        return collect($headers)
             ->map(function ($value, $header) use ($headerBlacklist) {
                 if (in_array($header, $headerBlacklist)) {
                     return '[redacted]';
