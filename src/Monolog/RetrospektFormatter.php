@@ -3,13 +3,12 @@
 namespace Retrospekt\LaravelClient\Monolog;
 
 use Monolog\Formatter\NormalizerFormatter;
-use Retrospekt\LaravelClient\Exceptions\RetrospektException;
 use Retrospekt\LaravelClient\Monolog\Formatting\RemoveChannel;
 use Retrospekt\LaravelClient\Monolog\Formatting\RemoveLevelName;
+use Retrospekt\LaravelClient\Monolog\Formatting\SerializeToJson;
 use Retrospekt\LaravelClient\Monolog\Formatting\MoveExceptionToExtra;
 use Retrospekt\LaravelClient\Monolog\Formatting\NormalizeContextData;
 use Retrospekt\LaravelClient\Monolog\Formatting\MoveDatetimeToTimestamp;
-use Retrospekt\LaravelClient\Monolog\Formatting\SerializeToJson;
 
 class RetrospektFormatter extends NormalizerFormatter
 {
