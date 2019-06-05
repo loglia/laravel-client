@@ -99,6 +99,8 @@ class LogHttpTest extends TestCase
         $this->assertSame($expectedHeaders, $log['--retrospekt']['request']['headers'], 'HTTP headers must match the request headers.');
     }
 
+    // TODO: add tests for all responses
+
     private function routeResolver()
     {
         return function () {
