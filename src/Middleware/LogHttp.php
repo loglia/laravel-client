@@ -36,21 +36,27 @@ class LogHttp
      *
      * @param $request
      * @param $response
+     * @return array
+     * @throws \Exception
      */
     public function terminate($request, $response)
     {
+        $payload = [
+            '--retrospekt' => [
+                'request' => $this->requestProperties($request),
+                'response' => $this->responseProperties($response)
+            ]
+        ];
+
         try {
-            Log::info('Handled HTTP request', [
-                '--retrospekt' => [
-                    'request' => $this->requestProperties($request),
-                    'response' => $this->responseProperties($response)
-                ]
-            ]);
+            Log::info('Handled HTTP request', $payload);
         } catch (\Exception $e) {
             Log::error('Exception thrown while logging HTTP request', [
                 'exception' => $e
             ]);
         }
+
+        return $payload;
     }
 
     /**
