@@ -88,7 +88,7 @@ class LogHttp
     {
         return [
             'status' => $response->getStatusCode(),
-            'took' => ceil((microtime(true) - $this->start) * 1000),
+            'took' => (int) ceil((microtime(true) - $this->start) * 1000),
             'size' => $this->responseSize($response),
             'headers' => $this->normalizeHeaders($response->headers->all())
         ];

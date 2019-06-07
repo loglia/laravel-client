@@ -99,7 +99,65 @@ class LogHttpTest extends TestCase
         $this->assertSame($expectedHeaders, $log['--retrospekt']['request']['headers'], 'HTTP headers must match the request headers.');
     }
 
-    // TODO: add tests for all responses
+    /** @test */
+    public function it_logs_response_statuses()
+    {
+        $request = new Request();
+        $request->setRouteResolver($this->routeResolver());
+
+        $this->middleware->handle($request, function () {});
+        $log = $this->middleware->terminate($request, new Response('', 404));
+
+        $this->assertSame(404, $log['--retrospekt']['response']['status'], 'HTTP response status must match response status.');
+    }
+
+    /** @test */
+    public function it_logs_response_time_taken()
+    {
+        $request = new Request();
+        $request->setRouteResolver($this->routeResolver());
+
+        $this->middleware->handle($request, function () {});
+        $log = $this->middleware->terminate($request, new Response);
+
+        $this->assertNotNull($log['--retrospekt']['response']['took'], 'HTTP response time taken must be present.');
+    }
+
+    /** @test */
+    public function it_logs_response_size()
+    {
+        $request = new Request();
+        $request->setRouteResolver($this->routeResolver());
+
+        $this->middleware->handle($request, function () {});
+        $log = $this->middleware->terminate($request, new Response('hello world'));
+
+        $this->assertSame(11, $log['--retrospekt']['response']['size'], 'HTTP response size must be accurate.');
+    }
+
+    /** @test */
+    public function it_logs_response_size_with_multibyte_characters()
+    {
+        $request = new Request();
+        $request->setRouteResolver($this->routeResolver());
+
+        $this->middleware->handle($request, function () {});
+        $log = $this->middleware->terminate($request, new Response('hello world 👋'));
+
+        $this->assertSame(16, $log['--retrospekt']['response']['size'], 'Multibyte characters should be supported in response size calculation.');
+    }
+
+    /** @test */
+    public function it_logs_response_headers()
+    {
+        $request = new Request;
+        $request->setRouteResolver($this->routeResolver());
+
+        $this->middleware->handle($request, function () {});
+        $log = $this->middleware->terminate($request, new Response('', 200, ['x-testing' => 'foo']));
+
+        $this->assertSame('foo', $log['--retrospekt']['response']['headers']['x-testing'], 'HTTP headers must match the response headers.');
+    }
 
     private function routeResolver()
     {
