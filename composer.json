@@ -24,7 +24,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Retrospekt\\LaravelClient\\LaravelClientServiceProvider"
+                "Loglia\\LaravelClient\\LaravelClientServiceProvider"
             ]
         }
     },

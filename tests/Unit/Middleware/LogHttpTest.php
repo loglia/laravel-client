@@ -1,13 +1,13 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Tests\Unit\Monolog;
+namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Orchestra\Testbench\TestCase;
-use Retrospekt\LaravelClient\Middleware\LogHttp;
+use Loglia\LaravelClient\Middleware\LogHttp;
 
 class LogHttpTest extends TestCase
 {
@@ -32,7 +32,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertTrue(Uuid::isValid($log['--retrospekt']['request']['uuid']), 'Request UUID must be a valid UUID.');
+        $this->assertTrue(Uuid::isValid($log['--loglia']['request']['uuid']), 'Request UUID must be a valid UUID.');
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertSame('/users/200a1d46-ac85-4619-9eca-1ae59c6bc366', $log['--retrospekt']['request']['url'], 'Request URL must match the current URL.');
+        $this->assertSame('/users/200a1d46-ac85-4619-9eca-1ae59c6bc366', $log['--loglia']['request']['url'], 'Request URL must match the current URL.');
     }
 
     /** @test */
@@ -56,7 +56,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertSame('/users/{uuid}', $log['--retrospekt']['request']['route'], 'Request route must match the current route.');
+        $this->assertSame('/users/{uuid}', $log['--loglia']['request']['route'], 'Request route must match the current route.');
     }
 
     /** @test */
@@ -68,7 +68,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertSame('GET', $log['--retrospekt']['request']['method'], 'Request method must match the HTTP method.');
+        $this->assertSame('GET', $log['--loglia']['request']['method'], 'Request method must match the HTTP method.');
     }
 
     /** @test */
@@ -80,7 +80,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertSame('210.34.170.149', $log['--retrospekt']['request']['client-ip'], 'Client IP must match the IP address of the client.');
+        $this->assertSame('210.34.170.149', $log['--loglia']['request']['client-ip'], 'Client IP must match the IP address of the client.');
     }
 
     /** @test */
@@ -96,7 +96,7 @@ class LogHttpTest extends TestCase
             'x-testing' => 'foo'
         ];
 
-        $this->assertSame($expectedHeaders, $log['--retrospekt']['request']['headers'], 'HTTP headers must match the request headers.');
+        $this->assertSame($expectedHeaders, $log['--loglia']['request']['headers'], 'HTTP headers must match the request headers.');
     }
 
     /** @test */
@@ -108,7 +108,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response('', 404));
 
-        $this->assertSame(404, $log['--retrospekt']['response']['status'], 'HTTP response status must match response status.');
+        $this->assertSame(404, $log['--loglia']['response']['status'], 'HTTP response status must match response status.');
     }
 
     /** @test */
@@ -120,7 +120,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertNotNull($log['--retrospekt']['response']['took'], 'HTTP response time taken must be present.');
+        $this->assertNotNull($log['--loglia']['response']['took'], 'HTTP response time taken must be present.');
     }
 
     /** @test */
@@ -132,7 +132,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response('hello world'));
 
-        $this->assertSame(11, $log['--retrospekt']['response']['size'], 'HTTP response size must be accurate.');
+        $this->assertSame(11, $log['--loglia']['response']['size'], 'HTTP response size must be accurate.');
     }
 
     /** @test */
@@ -144,7 +144,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response('hello world 👋'));
 
-        $this->assertSame(16, $log['--retrospekt']['response']['size'], 'Multibyte characters should be supported in response size calculation.');
+        $this->assertSame(16, $log['--loglia']['response']['size'], 'Multibyte characters should be supported in response size calculation.');
     }
 
     /** @test */
@@ -156,7 +156,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response('', 200, ['x-testing' => 'foo']));
 
-        $this->assertSame('foo', $log['--retrospekt']['response']['headers']['x-testing'], 'HTTP headers must match the response headers.');
+        $this->assertSame('foo', $log['--loglia']['response']['headers']['x-testing'], 'HTTP headers must match the response headers.');
     }
 
     private function routeResolver()

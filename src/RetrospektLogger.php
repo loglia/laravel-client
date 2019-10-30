@@ -1,30 +1,31 @@
 <?php
 
-namespace Retrospekt\LaravelClient;
+namespace Loglia\LaravelClient;
 
+use DateTime;
 use Monolog\Logger;
-use Retrospekt\LaravelClient\Monolog\RetrospektHandler;
-use Retrospekt\LaravelClient\Monolog\RetrospektFormatter;
+use Loglia\LaravelClient\Monolog\LogliaHandler;
+use Loglia\LaravelClient\Monolog\LogliaFormatter;
 
-class RetrospektLogger
+class LogliaLogger
 {
     /**
-     * Create a Monolog instance to send logs to Retrospekt.
+     * Create a Monolog instance to send logs to Loglia.
      *
      * @param array $config
      * @return Logger
      */
     public function __invoke(array $config)
     {
-        $logger = new Logger('retrospekt');
+        $logger = new Logger('loglia');
 
-        $handler = new RetrospektHandler;
+        $handler = new LogliaHandler;
 
-        if (config('retrospekt.endpoint')) {
-            $handler->setEndpoint(config('retrospekt.endpoint'));
+        if (config('loglia.endpoint')) {
+            $handler->setEndpoint(config('loglia.endpoint'));
         }
 
-        $handler->setFormatter(new RetrospektFormatter(\DateTime::ISO8601));
+        $handler->setFormatter(new LogliaFormatter(DateTime::ISO8601));
 
         $logger->pushHandler($handler);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Middleware;
+namespace Loglia\LaravelClient\Middleware;
 
 use Closure;
 use Ramsey\Uuid\Uuid;
@@ -32,7 +32,7 @@ class LogHttp
     }
 
     /**
-     * Sends the HTTP log to Retrospekt once the HTTP response is sent.
+     * Sends the HTTP log to Loglia once the HTTP response is sent.
      *
      * @param $request
      * @param $response
@@ -42,7 +42,7 @@ class LogHttp
     public function terminate($request, $response)
     {
         $payload = [
-            '--retrospekt' => [
+            '--loglia' => [
                 'request' => $this->requestProperties($request),
                 'response' => $this->responseProperties($response)
             ]
@@ -117,7 +117,7 @@ class LogHttp
      */
     private function normalizeHeaders(array $headers)
     {
-        $headerBlacklist = config('retrospekt.http.header_blacklist', []);
+        $headerBlacklist = config('loglia.http.header_blacklist', []);
 
         return collect($headers)
             ->map(function ($value, $header) use ($headerBlacklist) {

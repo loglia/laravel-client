@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog\Formatting;
+namespace Loglia\LaravelClient\Monolog\Formatting;
 
 interface Formatter
 {

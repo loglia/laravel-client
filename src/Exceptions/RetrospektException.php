@@ -1,8 +1,8 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Exceptions;
+namespace Loglia\LaravelClient\Exceptions;
 
-class RetrospektException extends \Exception
+class LogliaException extends \Exception
 {
     //
 }

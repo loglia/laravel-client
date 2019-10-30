@@ -1,16 +1,16 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog;
+namespace Loglia\LaravelClient\Monolog;
 
 use Monolog\Formatter\NormalizerFormatter;
-use Retrospekt\LaravelClient\Monolog\Formatting\RemoveChannel;
-use Retrospekt\LaravelClient\Monolog\Formatting\RemoveLevelName;
-use Retrospekt\LaravelClient\Monolog\Formatting\SerializeToJson;
-use Retrospekt\LaravelClient\Monolog\Formatting\MoveExceptionToExtra;
-use Retrospekt\LaravelClient\Monolog\Formatting\NormalizeContextData;
-use Retrospekt\LaravelClient\Monolog\Formatting\MoveDatetimeToTimestamp;
+use Loglia\LaravelClient\Monolog\Formatting\RemoveChannel;
+use Loglia\LaravelClient\Monolog\Formatting\RemoveLevelName;
+use Loglia\LaravelClient\Monolog\Formatting\SerializeToJson;
+use Loglia\LaravelClient\Monolog\Formatting\MoveExceptionToExtra;
+use Loglia\LaravelClient\Monolog\Formatting\NormalizeContextData;
+use Loglia\LaravelClient\Monolog\Formatting\MoveDatetimeToTimestamp;
 
-class RetrospektFormatter extends NormalizerFormatter
+class LogliaFormatter extends NormalizerFormatter
 {
     private $stages = [
         NormalizeContextData::class,
@@ -26,7 +26,7 @@ class RetrospektFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
-        // TODO: write a stage that takes any context in `--retrospekt` and moved it to extra
+        // TODO: write a stage that takes any context in `--loglia` and moved it to extra
         foreach ($this->stages as $stage) {
             $record = (new $stage)($record);
         }

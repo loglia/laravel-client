@@ -1,8 +1,8 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog\Formatting;
+namespace Loglia\LaravelClient\Monolog\Formatting;
 
-use Retrospekt\LaravelClient\Exceptions\RetrospektException;
+use Loglia\LaravelClient\Exceptions\LogliaException;
 
 class NormalizeContextData implements Formatter
 {
@@ -86,16 +86,16 @@ class NormalizeContextData implements Formatter
     }
 
     /**
-     * Normalizes an exception into a format expected by Retrospekt.
+     * Normalizes an exception into a format expected by Loglia.
      *
      * @param \Exception|\Throwable $e
      * @return array
-     * @throws RetrospektException
+     * @throws LogliaException
      */
     private function normalizeException($e)
     {
         if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new RetrospektException('Exception/Throwable expected');
+            throw new LogliaException('Exception/Throwable expected');
         }
 
         $exception = [
@@ -182,14 +182,14 @@ class NormalizeContextData implements Formatter
      *
      * @param $data
      * @return false|string
-     * @throws RetrospektException
+     * @throws LogliaException
      */
     private function toJson($data)
     {
         $json = json_encode($data);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RetrospektException('Failed to serialize context data property to JSON');
+            throw new LogliaException('Failed to serialize context data property to JSON');
         }
 
         return $json;

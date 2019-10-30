@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog\Formatting;
+namespace Loglia\LaravelClient\Monolog\Formatting;
 
 class SerializeToJson implements Formatter
 {
@@ -12,7 +12,7 @@ class SerializeToJson implements Formatter
         $encoded = json_encode($record);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RetrospektException('Unable to serialize log message to JSON');
+            throw new LogliaException('Unable to serialize log message to JSON');
         }
 
         return $encoded;

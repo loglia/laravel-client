@@ -1,14 +1,15 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog;
+namespace Loglia\LaravelClient\Monolog;
 
 use Monolog\Handler\AbstractProcessingHandler;
-use Retrospekt\LaravelClient\Exceptions\RetrospektException;
+use Loglia\LaravelClient\Exceptions\LogliaException;
 
-class RetrospektHandler extends AbstractProcessingHandler
+class LogliaHandler extends AbstractProcessingHandler
 {
     /**
      * Logging payloads above this size will not be sent. Currently 100 KiB.
+     * TODO: up this a little bit
      */
     const MAX_PAYLOAD_SIZE = 102400;
 
@@ -17,7 +18,7 @@ class RetrospektHandler extends AbstractProcessingHandler
      *
      * @var string
      */
-    private $endpoint = 'https://logs.retrospekt.io';
+    private $endpoint = 'https://logs.loglia.io';
 
     /**
      * Determines whether we pretend to send the log message.
@@ -47,10 +48,10 @@ class RetrospektHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sends the log message to Retrospekt.
+     * Sends the log message to Loglia.
      *
      * @param array $record
-     * @throws RetrospektException
+     * @throws LogliaException
      * @return string
      */
     public function write(array $record)
@@ -61,15 +62,15 @@ class RetrospektHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Throws an exception if the logging payload is too large to be sent to Retrospekt.
+     * Throws an exception if the logging payload is too large to be sent to Loglia.
      *
      * @param array $record
-     * @throws RetrospektException
+     * @throws LogliaException
      */
     private function checkPayloadSize(array $record)
     {
         if (($size = strlen($record['formatted'])) > static::MAX_PAYLOAD_SIZE) {
-            throw new RetrospektException(
+            throw new LogliaException(
                 sprintf(
                     'Log payload too large. Must be %d bytes or less, was %d bytes',
                     static::MAX_PAYLOAD_SIZE,
@@ -80,7 +81,7 @@ class RetrospektHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sends the log to Retrospekt using an asynchronous cURL command.
+     * Sends the log to Loglia using an asynchronous cURL command.
      *
      * @param $postData
      * @return string
@@ -114,7 +115,7 @@ class RetrospektHandler extends AbstractProcessingHandler
      */
     private function getUserAgent()
     {
-        return 'Retrospekt Laravel Client v1.0.0';
+        return 'Loglia Laravel Client v1.0.0';
     }
 
     /**

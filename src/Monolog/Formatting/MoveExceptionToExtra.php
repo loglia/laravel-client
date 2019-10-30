@@ -1,6 +1,6 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Monolog\Formatting;
+namespace Loglia\LaravelClient\Monolog\Formatting;
 
 class MoveExceptionToExtra implements Formatter
 {
@@ -39,7 +39,7 @@ class MoveExceptionToExtra implements Formatter
      */
     private function moveExceptionToExtra(array $record)
     {
-        $record['extra']['--retrospekt']['exception'] = $record['context']['exception'];
+        $record['extra']['--loglia']['exception'] = $record['context']['exception'];
 
         unset($record['context']['exception']);
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace Retrospekt\LaravelClient\Tests\Unit\Monolog;
+namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
 use PHPUnit\Framework\TestCase;
-use Retrospekt\LaravelClient\Monolog\RetrospektFormatter;
+use Loglia\LaravelClient\Monolog\LogliaFormatter;
 
-class RetrospektFormatterTest extends TestCase
+class LogliaFormatterTest extends TestCase
 {
     /**
-     * @var RetrospektFormatter
+     * @var LogliaFormatter
      */
     private $formatter;
 
     public function setUp()
     {
-        $this->formatter = new RetrospektFormatter(\DateTime::ISO8601);
+        $this->formatter = new LogliaFormatter(\DateTime::ISO8601);
     }
 
     /** @test */
@@ -34,8 +34,8 @@ class RetrospektFormatterTest extends TestCase
         $decoded = json_decode($result, true);
 
         $this->assertArrayNotHasKey('exception', $decoded['context'], 'Context data is not meant to have exception key.');
-        $this->assertArrayHasKey('--retrospekt', $decoded['extra'], 'Extra data is meant to have a --retrospekt key.');
-        $this->assertArrayHasKey('exception', $decoded['extra']['--retrospekt'], 'Extra data is meant to have a --retrospekt.exception key.');
+        $this->assertArrayHasKey('--loglia', $decoded['extra'], 'Extra data is meant to have a --retrospekt key.');
+        $this->assertArrayHasKey('exception', $decoded['extra']['--loglia'], 'Extra data is meant to have a --retrospekt.exception key.');
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class RetrospektFormatterTest extends TestCase
         $this->assertSame('hello world', $decoded['context']['string'], 'String log context did not return a string.');
         $this->assertSame(['hello' => 'world'], $decoded['context']['array'], 'Array log context did not return an array.');
         $this->assertSame('[object] (stdClass: {"foo":"bar"})', $decoded['context']['object'], 'Object log context was not returned in expected format.');
-        $this->assertSame('[object] (Retrospekt\LaravelClient\Tests\Unit\Monolog\ClassWithToString: hello world)', $decoded['context']['objecttostring'], 'Object with __toString() context was not returned in expected format.');
+        $this->assertSame('[object] (Loglia\LaravelClient\Tests\Unit\Monolog\ClassWithToString: hello world)', $decoded['context']['objecttostring'], 'Object with __toString() context was not returned in expected format.');
         $this->assertSame('[resource] (stream)', $decoded['context']['resource'], 'Resource log context was not returned in expected format.');
     }
 
@@ -89,7 +89,7 @@ class RetrospektFormatterTest extends TestCase
         $object = new \stdClass;
         $object->foo = 'bar';
 
-        $resource = fopen(tempnam('/tmp', 'retrospekt'), 'r');
+        $resource = fopen(tempnam('/tmp', 'loglia'), 'r');
 
         return [
             'message' => 'Second exception',
