@@ -9,7 +9,6 @@ class LogliaHandler extends AbstractProcessingHandler
 {
     /**
      * Logging payloads above this size will not be sent. Currently 100 KiB.
-     * TODO: up this a little bit
      */
     const MAX_PAYLOAD_SIZE = 102400;
 
@@ -19,6 +18,11 @@ class LogliaHandler extends AbstractProcessingHandler
      * @var string
      */
     private $endpoint = 'https://logs.loglia.io';
+
+    /**
+     * @var string
+     */
+    private $apiToken;
 
     /**
      * Determines whether we pretend to send the log message.
@@ -35,6 +39,16 @@ class LogliaHandler extends AbstractProcessingHandler
     public function setEndpoint($endpoint)
     {
         $this->endpoint = $endpoint;
+    }
+
+    /**
+     * Sets the API token for authenticated requests when sending logs.
+     *
+     * @param $apiToken
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
     }
 
     /**
@@ -90,6 +104,8 @@ class LogliaHandler extends AbstractProcessingHandler
     {
         $parts = [
             'curl',
+            '-H',
+            "'Authorization: Bearer {$this->apiToken}'",
             '-A',
             $this->escapeArgument($this->getUserAgent()),
             '-X POST',

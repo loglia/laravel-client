@@ -34,6 +34,7 @@ class LogliaHandlerTest extends TestCase
     {
         $handler = new LogliaHandler;
         $handler->setPretend(true);
+        $handler->setApiToken('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
@@ -46,7 +47,7 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
     }
 
     /** @test */
@@ -55,6 +56,7 @@ class LogliaHandlerTest extends TestCase
         $handler = new LogliaHandler;
         $handler->setPretend(true);
         $handler->setEndpoint('https://example.org');
+        $handler->setApiToken('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
@@ -67,7 +69,7 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://example.org > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://example.org > /dev/null 2>&1 &", $cmd);
     }
 
     /** @test */
@@ -75,6 +77,7 @@ class LogliaHandlerTest extends TestCase
     {
         $handler = new LogliaHandler;
         $handler->setPretend(true);
+        $handler->setApiToken('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
@@ -87,6 +90,6 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"unicode", "§Ĭɮڡউ█👍"}'
         ]);
 
-        $this->assertSame("curl -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
     }
 }

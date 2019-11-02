@@ -14,8 +14,5 @@ return [
          */
         'header_blacklist' => ['authorization', 'cookie', 'set-cookie', 'proxy-authenticate']
 
-    ],
-
-    // not in real config file, overridden for development
-    'endpoint' => 'http://requestbin.fullcontact.com/150nfzy1'
+    ]
 ];
