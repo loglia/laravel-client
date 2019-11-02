@@ -7,12 +7,12 @@
 
 # System Requirements
 
-The Loglia client required the following be installed and available on your system:
+The Loglia client requires the following be installed and available on your system:
 
 - Laravel 5.6+
 - PHP 7.1+
 - cURL system library (available on the command line via `curl`)
 
-# Set up
+# Quick start
 
 TODO
