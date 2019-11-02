@@ -15,4 +15,4 @@ The Loglia client required the following be installed and available on your syst
 
 # Set up
 
-TODO; this
+TODO
