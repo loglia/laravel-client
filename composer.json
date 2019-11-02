@@ -1,7 +1,7 @@
 {
-    "name": "retrospekt/laravel-client",
+    "name": "loglia/laravel-client",
     "description": "For sending logs and such.",
-    "homepage": "https://retrospekt.app",
+    "homepage": "https://www.loglia.app",
     "type": "library",
     "license": "MIT",
     "require": {
