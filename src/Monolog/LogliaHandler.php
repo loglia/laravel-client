@@ -36,7 +36,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @param string $endpoint
      */
-    public function setEndpoint($endpoint)
+    public function setEndpoint(string $endpoint): void
     {
         $this->endpoint = $endpoint;
     }
@@ -44,9 +44,9 @@ class LogliaHandler extends AbstractProcessingHandler
     /**
      * Sets the API token for authenticated requests when sending logs.
      *
-     * @param $apiToken
+     * @param string $apiToken
      */
-    public function setApiToken($apiToken)
+    public function setApiToken(string $apiToken): void
     {
         $this->apiToken = $apiToken;
     }
@@ -54,9 +54,9 @@ class LogliaHandler extends AbstractProcessingHandler
     /**
      * Allows for us to pretend to send the log message. Useful for testing purposes.
      *
-     * @param $pretend
+     * @param bool $pretend
      */
-    public function setPretend($pretend)
+    public function setPretend(bool $pretend): void
     {
         $this->pretend = $pretend;
     }
@@ -68,7 +68,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @throws LogliaException
      * @return string
      */
-    public function write(array $record)
+    public function write(array $record): string
     {
         $this->checkPayloadSize($record);
 
@@ -81,7 +81,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @param array $record
      * @throws LogliaException
      */
-    private function checkPayloadSize(array $record)
+    private function checkPayloadSize(array $record): void
     {
         if (($size = strlen($record['formatted'])) > static::MAX_PAYLOAD_SIZE) {
             throw new LogliaException(
@@ -97,10 +97,10 @@ class LogliaHandler extends AbstractProcessingHandler
     /**
      * Sends the log to Loglia using an asynchronous cURL command.
      *
-     * @param $postData
+     * @param string $postData
      * @return string
      */
-    private function send($postData)
+    private function send(string $postData): string
     {
         $parts = [
             'curl',
@@ -129,7 +129,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @return string
      */
-    private function getUserAgent()
+    private function getUserAgent(): string
     {
         return 'Loglia Laravel Client v1.0.0';
     }
@@ -140,10 +140,10 @@ class LogliaHandler extends AbstractProcessingHandler
      * Extracted from: https://github.com/symfony/process/blob/v4.2.9/Process.php#L1613-L1633
      * All credit goes to the original developers.
      *
-     * @param $argument
+     * @param string $argument
      * @return string
      */
-    private function escapeArgument($argument)
+    private function escapeArgument(string $argument): string
     {
         if ($argument === '' || $argument === null) {
             return '""';
