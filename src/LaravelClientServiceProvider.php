@@ -11,7 +11,7 @@ class LaravelClientServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/loglia.php' => config_path('loglia.php'),
-        ], 'config');
+        ], 'loglia');
     }
 
     public function register()
