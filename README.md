@@ -19,4 +19,7 @@ The Loglia client requires the following be installed and available on your syst
 
 # Quick start
 
-TODO
+First, require the package with Composer:
+
+    composer require loglia/laravel-client
+    
