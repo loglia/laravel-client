@@ -5,11 +5,11 @@
     <a href="https://packagist.org/packages/loglia/laravel-client"><img src="https://poser.pugx.org/loglia/laravel-client/v/stable.svg" alt="Latest Stable Version"></a>
 </p>
 
-# About Loglia
+## About Loglia
 
 [Loglia](https://www.loglia.app) is a cloud-based Laravel logging and monitoring solution. Loglia will take your Laravel application's logs and make them searchable, filterable and linkable to the rest of your team. If you've ever wondered what your app would say if it could speak, Loglia will tell you.
 
-# System Requirements
+## System Requirements
 
 The Loglia client requires the following be installed and available on your system:
 
@@ -17,7 +17,7 @@ The Loglia client requires the following be installed and available on your syst
 - PHP 7.1+
 - cURL system library (available on the command line via `curl`)
 
-# Quick start
+## Quick start
 
 **Firstly, require the package with Composer**:
 
