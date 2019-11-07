@@ -21,8 +21,8 @@ class LogliaLogger
 
         $handler = new LogliaHandler;
 
-        if (config('loglia.api_token')) {
-            $handler->setApiToken(config('loglia.api_token'));
+        if (config('loglia.api_key')) {
+            $handler->setApiToken(config('loglia.api_key'));
         }
 
         if (config('loglia.endpoint')) {
