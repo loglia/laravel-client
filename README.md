@@ -19,8 +19,16 @@ The Loglia client requires the following be installed and available on your syst
 
 # Quick start
 
-First, require the package with Composer:
+1. **First, require the package with Composer**:
 
     composer require loglia/laravel-client
     
 The package uses [package discovery](https://laravel.com/docs/5.6/packages#package-discovery) so you shouldn't need to add the service provider to `app.php`. If you've disabled package discovery in your app, add `Loglia\LaravelClient\LaravelClientServiceProvider::class` to the `providers` array in `app.php` manually.
+
+2. **Then, publish the Loglia configuration file**.
+
+    php artisan vendor:publish --tag=loglia
+    
+You need an API key in order to send your application's logs to Loglia. Once you've set up your application in the Loglia UI, go to application settings and copy the API key into your project's environment variables.
+
+    LOGLIA_API_KEY=2jeTB67XHLNK4w5OH6NIZCN5OGDAQQ43c1pTo7XuTqwIHsZihfe4EGf8hH6Ufdtc
