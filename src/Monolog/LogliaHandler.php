@@ -68,11 +68,11 @@ class LogliaHandler extends AbstractProcessingHandler
      * @throws LogliaException
      * @return string
      */
-    public function write(array $record): string
+    public function write(array $record): void
     {
         $this->checkPayloadSize($record);
 
-        return $this->send($record['formatted']);
+        $this->send($record['formatted']);
     }
 
     /**
@@ -100,7 +100,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @param string $postData
      * @return string
      */
-    private function send(string $postData): string
+    private function send(string $postData): void
     {
         $parts = [
             'curl',
@@ -120,8 +120,6 @@ class LogliaHandler extends AbstractProcessingHandler
         if (! $this->pretend) {
             exec($cmd);
         }
-
-        return $cmd;
     }
 
     /**
