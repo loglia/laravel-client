@@ -73,6 +73,15 @@ class LogliaFormatterTest extends TestCase
     }
 
     /** @test */
+    public function it_adds_type_of_log_if_missing()
+    {
+        $result = $this->formatter->format($this->generateLog());
+        $decoded = json_decode($result, true);
+
+        $this->assertSame('log', $decoded['extra']['--loglia']['type'], 'extra.--loglia.type must be `log`.');
+    }
+
+    /** @test */
     public function it_serializes_the_log_to_json()
     {
         $result = $this->formatter->format($this->generateLog());
