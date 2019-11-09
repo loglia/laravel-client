@@ -43,6 +43,7 @@ class LogHttp
     {
         $payload = [
             '--loglia' => [
+                'type' => 'http',
                 'request' => $this->requestProperties($request),
                 'response' => $this->responseProperties($response)
             ]
