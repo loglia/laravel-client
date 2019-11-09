@@ -17,7 +17,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @var string
      */
-    private $endpoint = 'https://logs.loglia.io';
+    private $endpoint = 'https://logs.loglia.app';
 
     /**
      * @var string
