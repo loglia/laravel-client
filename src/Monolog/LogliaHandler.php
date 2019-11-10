@@ -107,7 +107,7 @@ class LogliaHandler extends AbstractProcessingHandler
             '-H',
             "'Authorization: Bearer {$this->apiKey}'",
             '-H',
-            'Content-Type: application/json',
+            "'Content-Type: application/json'",
             '-A',
             $this->escapeArgument($this->getUserAgent()),
             '-X POST',
