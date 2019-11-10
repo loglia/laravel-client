@@ -22,7 +22,7 @@ class LogliaHandler extends AbstractProcessingHandler
     /**
      * @var string
      */
-    private $apiToken;
+    private $apiKey;
 
     /**
      * Determines whether we pretend to send the log message.
@@ -42,13 +42,13 @@ class LogliaHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sets the API token for authenticated requests when sending logs.
+     * Sets the API key for authenticated requests when sending logs.
      *
-     * @param string $apiToken
+     * @param string $apiKey
      */
-    public function setApiToken(string $apiToken): void
+    public function setApiKey(string $apiKey): void
     {
-        $this->apiToken = $apiToken;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -105,7 +105,7 @@ class LogliaHandler extends AbstractProcessingHandler
         $parts = [
             'curl',
             '-H',
-            "'Authorization: Bearer {$this->apiToken}'",
+            "'Authorization: Bearer {$this->apiKey}'",
             '-H',
             'Content-Type: application/json',
             '-A',

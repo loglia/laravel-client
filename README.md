@@ -31,7 +31,7 @@ The package uses [package discovery](https://laravel.com/docs/5.6/packages#packa
     
 You need an API key in order to send your application's logs to Loglia. Once you've set up your application in the Loglia UI, go to application settings and copy the API key into your project's environment variables.
 
-    LOGLIA_API_KEY=2jeTB67XHLNK4w5OH6NIZCN5OGDAQQ43c1pTo7XuTqwIHsZihfe4EGf8hH6Ufdtc
+    LOGLIA_KEY=2jeTB67XHLNK4w5OH6NIZCN5OGDAQQ43c1pTo7XuTqwIHsZihfe4EGf8hH6Ufdtc
 
 **Thirdly, configure your application to send its logs to Loglia**.
 

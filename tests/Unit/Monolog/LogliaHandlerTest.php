@@ -34,7 +34,7 @@ class LogliaHandlerTest extends TestCase
     {
         $handler = new LogliaHandler;
         $handler->setPretend(true);
-        $handler->setApiToken('abc123');
+        $handler->setApiKey('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
@@ -56,7 +56,7 @@ class LogliaHandlerTest extends TestCase
         $handler = new LogliaHandler;
         $handler->setPretend(true);
         $handler->setEndpoint('https://example.org');
-        $handler->setApiToken('abc123');
+        $handler->setApiKey('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
@@ -77,7 +77,7 @@ class LogliaHandlerTest extends TestCase
     {
         $handler = new LogliaHandler;
         $handler->setPretend(true);
-        $handler->setApiToken('abc123');
+        $handler->setApiKey('abc123');
 
         $cmd = $handler->write([
             'message' => 'Hello world',
