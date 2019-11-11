@@ -5,8 +5,8 @@ namespace Loglia\LaravelClient\Middleware;
 use Closure;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class LogHttp
 {
