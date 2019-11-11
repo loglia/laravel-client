@@ -9,11 +9,13 @@ use Loglia\LaravelClient\Monolog\Formatting\SerializeToJson;
 use Loglia\LaravelClient\Monolog\Formatting\AddTypeIfMissing;
 use Loglia\LaravelClient\Monolog\Formatting\MoveExceptionToExtra;
 use Loglia\LaravelClient\Monolog\Formatting\NormalizeContextData;
+use Loglia\LaravelClient\Monolog\Formatting\MoveLogliaObjectToExtra;
 use Loglia\LaravelClient\Monolog\Formatting\MoveDatetimeToTimestamp;
 
 class LogliaFormatter extends NormalizerFormatter
 {
     private $stages = [
+        MoveLogliaObjectToExtra::class,
         NormalizeContextData::class,
         MoveDatetimeToTimestamp::class,
         RemoveLevelName::class,

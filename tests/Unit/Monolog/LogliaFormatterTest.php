@@ -18,6 +18,16 @@ class LogliaFormatterTest extends TestCase
     }
 
     /** @test */
+    public function it_moved_loglia_object_to_extra()
+    {
+        $result = $this->formatter->format($this->generateLog());
+        $decoded = json_decode($result, true);
+
+        $this->assertArrayNotHasKey('--loglia', $decoded['context'], '--loglia should have been moved away from context.');
+        $this->assertArrayHasKey('--loglia', $decoded['extra'], 'Extra data is meant to have --loglia key.');
+    }
+
+    /** @test */
     public function it_moves_datetime_to_timestamp()
     {
         $result = $this->formatter->format($this->generateLog());
@@ -111,7 +121,10 @@ class LogliaFormatterTest extends TestCase
                 'array' => ['hello' => 'world'],
                 'object' => $object,
                 'objecttostring' => new ClassWithToString,
-                'resource' => $resource
+                'resource' => $resource,
+                '--loglia' => [
+                    'foo' => 'bar'
+                ]
             ],
             'level' => 400,
             'level_name' => 'ERROR',
