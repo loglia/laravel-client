@@ -3,6 +3,7 @@
 namespace Loglia\LaravelClient;
 
 use DateTime;
+use Loglia\LaravelClient\Monolog\Sticky\StickyContextProcessor;
 use Monolog\Logger;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
@@ -32,6 +33,7 @@ class LogliaLogger
         $handler->setFormatter(new LogliaFormatter(DateTime::ISO8601));
 
         $logger->pushHandler($handler);
+        $logger->pushProcessor(new StickyContextProcessor);
 
         return $logger;
     }
