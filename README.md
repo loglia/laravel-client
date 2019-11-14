@@ -1,7 +1,7 @@
 <p align="center"><img src="https://res.cloudinary.com/loglia/image/upload/v1572656182/logo-dark_obmuma.svg"></p>
 <p align="center"><i>Laravel Client</i></p>
 <p align="center">
-    <a href="https://travis-ci.org/loglia/laravel-client"><img src="https://travis-ci.org/loglia/laravel-client.svg" alt="Build Status"></a>
+    <a href="https://github.com/loglia/laravel-client/actions"><img src="https://github.com/loglia/laravel-client/workflows/PHPUnit/badge.svg" alt="Build Status"></a>
     <a href="https://packagist.org/packages/loglia/laravel-client"><img src="https://poser.pugx.org/loglia/laravel-client/v/stable.svg" alt="Latest Stable Version"></a>
 </p>
 
