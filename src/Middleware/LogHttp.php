@@ -128,6 +128,9 @@ class LogHttp
 
                 return $value[0];
             })
+            ->filter(function ($value) {
+                return ! empty($value);
+            })
             ->toArray();
     }
 }
