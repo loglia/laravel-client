@@ -18,7 +18,7 @@ class LogliaFormatterTest extends TestCase
     }
 
     /** @test */
-    public function it_moved_loglia_object_to_extra()
+    public function it_moves_loglia_object_to_extra()
     {
         $result = $this->formatter->format($this->generateLog());
         $decoded = json_decode($result, true);
