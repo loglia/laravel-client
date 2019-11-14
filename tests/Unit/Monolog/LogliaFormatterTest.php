@@ -108,7 +108,7 @@ class LogliaFormatterTest extends TestCase
         $object = new \stdClass;
         $object->foo = 'bar';
 
-        $resource = fopen(tempnam('/tmp', 'loglia'), 'r');
+        $resource = fopen(tempnam(sys_get_temp_dir(), 'loglia'), 'r');
 
         return [
             'message' => 'Second exception',
