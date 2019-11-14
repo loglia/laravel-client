@@ -8,9 +8,9 @@ use Loglia\LaravelClient\Monolog\Sticky\StickyContextProcessor;
 
 class StickyContextProcessorTest extends TestCase
 {
-    public function tearDown()
+    public function setUp(): void
     {
-        // Clear the sticky context after each test run.
+        // Clear the sticky context before each test run.
         StickyContext::clear();
     }
 

@@ -7,6 +7,12 @@ use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
 
 class StickyContextTest extends TestCase
 {
+    public function setUp(): void
+    {
+        // Clear the sticky context before each test run.
+        StickyContext::clear();
+    }
+
     /**
      * @test
      */

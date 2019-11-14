@@ -22,6 +22,9 @@ class LogHttpTest extends TestCase
         parent::setUp();
 
         $this->middleware = new LogHttp;
+
+        // Clear the sticky context before each test run.
+        StickyContext::clear();
     }
 
     /** @test */
