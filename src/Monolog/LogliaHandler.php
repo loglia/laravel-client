@@ -32,6 +32,13 @@ class LogliaHandler extends AbstractProcessingHandler
     private $pretend = false;
 
     /**
+     * The last cURL command executed.
+     *
+     * @var string|null
+     */
+    private $lastCommand = null;
+
+    /**
      * Allows the endpoint to send logs to be overridden if desired (e.g. for testing purposes).
      *
      * @param string $endpoint
@@ -59,6 +66,16 @@ class LogliaHandler extends AbstractProcessingHandler
     public function setPretend(bool $pretend): void
     {
         $this->pretend = $pretend;
+    }
+
+    /**
+     * Returns the last cURL command executed.
+     *
+     * @return string
+     */
+    public function getLastCommand(): string
+    {
+        return $this->lastCommand;
     }
 
     /**
@@ -122,6 +139,8 @@ class LogliaHandler extends AbstractProcessingHandler
         if (! $this->pretend) {
             exec($cmd);
         }
+
+        $this->lastCommand = $cmd;
     }
 
     /**

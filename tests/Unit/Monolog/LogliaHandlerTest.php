@@ -36,7 +36,7 @@ class LogliaHandlerTest extends TestCase
         $handler->setPretend(true);
         $handler->setApiKey('abc123');
 
-        $cmd = $handler->write([
+        $handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -47,7 +47,7 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://logs.loglia.app > /dev/null 2>&1 &", $handler->getLastCommand());
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class LogliaHandlerTest extends TestCase
         $handler->setEndpoint('https://example.org');
         $handler->setApiKey('abc123');
 
-        $cmd = $handler->write([
+        $handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -69,7 +69,7 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://example.org > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"hello\", \"world\"}' https://example.org > /dev/null 2>&1 &", $handler->getLastCommand());
     }
 
     /** @test */
@@ -79,7 +79,7 @@ class LogliaHandlerTest extends TestCase
         $handler->setPretend(true);
         $handler->setApiKey('abc123');
 
-        $cmd = $handler->write([
+        $handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -90,6 +90,6 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"unicode", "§Ĭɮڡউ█👍"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.loglia.io > /dev/null 2>&1 &", $cmd);
+        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v1.0.0' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.loglia.app > /dev/null 2>&1 &", $handler->getLastCommand());
     }
 }
