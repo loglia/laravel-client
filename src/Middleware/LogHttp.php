@@ -3,6 +3,7 @@
 namespace Loglia\LaravelClient\Middleware;
 
 use Closure;
+use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -23,9 +24,16 @@ class LogHttp
      * @param \Illuminate\Http\Request $request
      * @param \Closure $next
      * @return Response
+     * @throws \Exception
      */
     public function handle($request, Closure $next)
     {
+        StickyContext::add('--loglia', [
+            'request' => [
+                'uuid' => Uuid::uuid4()->toString()
+            ]
+        ]);
+
         $this->start = microtime(true);
 
         return $next($request);
@@ -70,7 +78,6 @@ class LogHttp
     private function requestProperties(Request $request)
     {
         return [
-            'uuid' => Uuid::uuid4()->toString(),
             'url' => $request->getPathInfo(),
             'route' => $request->route()->uri,
             'method' => $request->method(),
