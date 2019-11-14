@@ -2,6 +2,7 @@
 
 namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
+use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,15 +25,14 @@ class LogHttpTest extends TestCase
     }
 
     /** @test */
-    public function it_logs_request_uuid()
+    public function it_logs_request_uuid_using_sticky_context()
     {
         $request = new Request;
         $request->setRouteResolver($this->routeResolver());
 
         $this->middleware->handle($request, function () {});
-        $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertTrue(Uuid::isValid($log['--loglia']['request']['uuid']), 'Request UUID must be a valid UUID.');
+        $this->assertTrue(Uuid::isValid(StickyContext::all()['--loglia']['request']['uuid']), 'Request UUID must be a valid UUID.');
     }
 
     /** @test */
