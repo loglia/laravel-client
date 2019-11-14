@@ -32,8 +32,8 @@ class LogliaLogger
 
         $handler->setFormatter(new LogliaFormatter(DateTime::ISO8601));
 
+        $handler->pushProcessor(new StickyContextProcessor);
         $logger->pushHandler($handler);
-        $logger->pushProcessor(new StickyContextProcessor);
 
         return $logger;
     }
