@@ -9,8 +9,8 @@ class AddTypeIfMissing implements Formatter
      */
     public function __invoke(array $record)
     {
-        if (empty($record['extra']['--loglia']['type'])) {
-            $record['extra']['--loglia']['type'] = 'log';
+        if (empty($record['extra']['__loglia']['type'])) {
+            $record['extra']['__loglia']['type'] = 'log';
         }
 
         return $record;

@@ -28,7 +28,7 @@ class LogHttp
      */
     public function handle($request, Closure $next)
     {
-        StickyContext::add('--loglia', [
+        StickyContext::add('__loglia', [
             'request' => [
                 'uuid' => Uuid::uuid4()->toString()
             ]
@@ -50,7 +50,7 @@ class LogHttp
     public function terminate($request, $response)
     {
         $payload = [
-            '--loglia' => [
+            '__loglia' => [
                 'type' => 'http',
                 'request' => $this->requestProperties($request),
                 'response' => $this->responseProperties($response)

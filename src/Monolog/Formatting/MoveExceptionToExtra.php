@@ -39,7 +39,7 @@ class MoveExceptionToExtra implements Formatter
      */
     private function moveExceptionToExtra(array $record)
     {
-        $record['extra']['--loglia']['exception'] = $record['context']['exception'];
+        $record['extra']['__loglia']['exception'] = $record['context']['exception'];
 
         unset($record['context']['exception']);
 

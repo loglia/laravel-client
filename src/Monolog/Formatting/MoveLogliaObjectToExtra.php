@@ -24,7 +24,7 @@ class MoveLogliaObjectToExtra implements Formatter
      */
     private function recordHasLogliaObject(array $record)
     {
-        if (empty($record['context']['--loglia'])) {
+        if (empty($record['context']['__loglia'])) {
             return false;
         }
 
@@ -39,9 +39,9 @@ class MoveLogliaObjectToExtra implements Formatter
      */
     private function moveLogliaObjectToExtra(array $record)
     {
-        $record['extra']['--loglia'] = $record['context']['--loglia'];
+        $record['extra']['__loglia'] = $record['context']['__loglia'];
 
-        unset($record['context']['--loglia']);
+        unset($record['context']['__loglia']);
 
         return $record;
     }

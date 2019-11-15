@@ -23,8 +23,8 @@ class LogliaFormatterTest extends TestCase
         $result = $this->formatter->format($this->generateLog());
         $decoded = json_decode($result, true);
 
-        $this->assertArrayNotHasKey('--loglia', $decoded['context'], '--loglia should have been moved away from context.');
-        $this->assertArrayHasKey('--loglia', $decoded['extra'], 'Extra data is meant to have --loglia key.');
+        $this->assertArrayNotHasKey('__loglia', $decoded['context'], '__loglia should have been moved away from context.');
+        $this->assertArrayHasKey('__loglia', $decoded['extra'], 'Extra data is meant to have __loglia key.');
     }
 
     /** @test */
@@ -44,8 +44,8 @@ class LogliaFormatterTest extends TestCase
         $decoded = json_decode($result, true);
 
         $this->assertArrayNotHasKey('exception', $decoded['context'], 'Context data is not meant to have exception key.');
-        $this->assertArrayHasKey('--loglia', $decoded['extra'], 'Extra data is meant to have a --retrospekt key.');
-        $this->assertArrayHasKey('exception', $decoded['extra']['--loglia'], 'Extra data is meant to have a --retrospekt.exception key.');
+        $this->assertArrayHasKey('__loglia', $decoded['extra'], 'Extra data is meant to have a --retrospekt key.');
+        $this->assertArrayHasKey('exception', $decoded['extra']['__loglia'], 'Extra data is meant to have a --retrospekt.exception key.');
     }
 
     /** @test */
@@ -88,7 +88,7 @@ class LogliaFormatterTest extends TestCase
         $result = $this->formatter->format($this->generateLog());
         $decoded = json_decode($result, true);
 
-        $this->assertSame('log', $decoded['extra']['--loglia']['type'], 'extra.--loglia.type must be `log`.');
+        $this->assertSame('log', $decoded['extra']['__loglia']['type'], 'extra.__loglia.type must be `log`.');
     }
 
     /** @test */
@@ -122,7 +122,7 @@ class LogliaFormatterTest extends TestCase
                 'object' => $object,
                 'objecttostring' => new ClassWithToString,
                 'resource' => $resource,
-                '--loglia' => [
+                '__loglia' => [
                     'foo' => 'bar'
                 ]
             ],

@@ -30,7 +30,7 @@ class LogliaFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
-        // TODO: write a stage that takes any context in `--loglia` and moved it to extra
+        // TODO: write a stage that takes any context in `__loglia` and moved it to extra
         foreach ($this->stages as $stage) {
             $record = (new $stage)($record);
         }
