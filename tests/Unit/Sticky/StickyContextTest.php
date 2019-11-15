@@ -1,9 +1,9 @@
 <?php
 
-namespace Loglia\LaravelClient\Tests\Unit\Monolog;
+namespace Loglia\LaravelClient\Tests\Unit\Sticky;
 
 use PHPUnit\Framework\TestCase;
-use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
+use Loglia\LaravelClient\Sticky\StickyContext;
 
 class StickyContextTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Loglia\LaravelClient\Monolog\Sticky;
+namespace Loglia\LaravelClient\Sticky;
 
 class StickyContext
 {

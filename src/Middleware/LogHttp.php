@@ -3,10 +3,10 @@
 namespace Loglia\LaravelClient\Middleware;
 
 use Closure;
-use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Loglia\LaravelClient\Sticky\StickyContext;
 use Symfony\Component\HttpFoundation\Response;
 
 class LogHttp

@@ -2,13 +2,13 @@
 
 namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
-use Loglia\LaravelClient\Monolog\Sticky\StickyContext;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Orchestra\Testbench\TestCase;
 use Loglia\LaravelClient\Middleware\LogHttp;
+use Loglia\LaravelClient\Sticky\StickyContext;
 
 class LogHttpTest extends TestCase
 {
