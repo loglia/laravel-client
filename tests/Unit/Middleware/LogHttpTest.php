@@ -83,7 +83,7 @@ class LogHttpTest extends TestCase
         $this->middleware->handle($request, function () {});
         $log = $this->middleware->terminate($request, new Response);
 
-        $this->assertSame('210.34.170.149', $log['__loglia']['request']['client-ip'], 'Client IP must match the IP address of the client.');
+        $this->assertSame('210.34.170.149', $log['__loglia']['request']['client_ip'], 'Client IP must match the IP address of the client.');
     }
 
     /** @test */
