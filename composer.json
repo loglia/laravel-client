@@ -1,0 +1,38 @@
+{
+    "name": "loglia/laravel-client",
+    "description": "For sending logs and such.",
+    "homepage": "https://www.loglia.app",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^7.1",
+        "ext-json": "*",
+        "illuminate/support": "~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "monolog/monolog": "^1.12|^2.0",
+        "ramsey/uuid": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7",
+        "mockery/mockery": "^1.2",
+        "orchestra/testbench": "^3.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Loglia\\LaravelClient\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Loglia\\LaravelClient\\LaravelClientServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "prefer-stable": true,
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}
