@@ -81,7 +81,7 @@ class LogHttp
             'url' => $request->getPathInfo(),
             'route' => $request->route()->uri,
             'method' => $request->method(),
-            'client-ip' => $request->getClientIp(),
+            'client_ip' => $request->getClientIp(),
             'headers' => $this->normalizeHeaders($request->headers->all())
         ];
     }
