@@ -45,3 +45,31 @@ Crack open the `logging.php` config file and add this under the `channels` array
 Then change the `LOG_CHANNEL` environment variable in `.env` to use that channel.
 
     LOG_CHANNEL=loglia
+
+You logs will now be sent to the application you have set up in the Loglia dashboard!
+
+## HTTP Logging
+
+This package ships with a `LogHttp` middleware which can be used to log all of the HTTP requests sent to your application. This functionality ships as middleware so that you have complete control over which routes log requests.
+
+If you would like to log all HTTP requests across your whole application, you can add the `LogHttp` middleware to your global middleware stack in `app/Http/Kernel.php`:
+
+    protected $middleware = [
+        // ... other middleware ...
+        \Loglia\LaravelClient\Middleware\LogHttp::class,
+    ];
+    
+Alternatively, you are free to assign the middleware a name in the `$routeMiddleware` array and assign it only to specific routes:
+
+    protected $routeMiddleware = [
+        // ... other middleware ...
+        'log.http' => \Loglia\LaravelClient\Middleware\LogHttp::class,
+    ];
+    
+And then use it as normal in your route definitions:
+
+    Route::group(['middleware' => ['log.http']], function () {
+        Route::get('/', function () {
+            return view('welcome');
+        });
+    });
