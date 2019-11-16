@@ -73,3 +73,15 @@ And then use it as normal in your route definitions:
             return view('welcome');
         });
     });
+
+## Configuration
+
+The package ships with a `loglia.php` configuration file that can be used to tweak the Loglia-specific configuration. The comments in this file should be self-explanatory, but below is a reference.
+
+### `api_key`
+
+This is the API key that will authenticate your application with Loglia. Without it, Loglia won't know which application the logs you are sending is for. You should generate an API key in your application settings and set its value here.
+
+### `http.header_blacklist`
+
+When logging HTTP requests, Loglia will also capture the HTTP headers in the request and response. Some of these headers contain sensitive information such as credentials and sensitive cookies. This array contains a list of HTTP headers that should be scrubbed from the request and response before sending to Loglia. It is pre-filled with sensible defaults but you are free to add any header you want.
