@@ -38,8 +38,7 @@ You need an API key in order to send your application's logs to Loglia. Once you
 Crack open the `logging.php` config file and add this under the `channels` array:
 
     'loglia' => [
-        'driver' => 'custom',
-        'via' => Loglia\LaravelClient\LogliaLogger::class,
+        'driver' => 'loglia'
     ]
     
 Then change the `LOG_CHANNEL` environment variable in `.env` to use that channel.
