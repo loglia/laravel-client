@@ -22,27 +22,44 @@ class LaravelClientServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/loglia.php', 'loglia');
 
-        $this->app['log']->extend('loglia', function ($app, array $config) {
-            $logger = new Logger('loglia');
+        if ($this->app['log'] instanceof LogManager) {
+            // In L5.6+, extend the log component with a loglia driver.
+            $this->app['log']->extend('loglia', function ($app, array $config) {
+                return $this->setUpLogger(new Logger('loglia'));
+            });
+        } else {
+            // In older Laravel versions, modify Monolog to use the Loglia handler.
+            $this->setUpLogger($this->app['log']->getMonolog());
+        }
 
-            $handler = new LogliaHandler;
-
-            if (config('loglia.api_key')) {
-                $handler->setApiKey(config('loglia.api_key'));
-            }
-
-            if (config('loglia.endpoint')) {
-                $handler->setEndpoint(config('loglia.endpoint'));
-            }
-
-            $handler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
-
-            $handler->pushProcessor(new StickyContextProcessor);
-            $logger->pushHandler($handler);
-
-            return $logger;
-        });
 
         $this->app->singleton(LogHttp::class);
+    }
+
+    /**
+     * Sets up and returns the provided Monolog logger.
+     *
+     * @param Logger $logger
+     * @return Logger
+     */
+    private function setUpLogger(Logger $logger)
+    {
+        $handler = new LogliaHandler;
+
+        if (config('loglia.api_key')) {
+            $handler->setApiKey(config('loglia.api_key'));
+        }
+
+        if (config('loglia.endpoint')) {
+            $handler->setEndpoint(config('loglia.endpoint'));
+        }
+
+        $handler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
+
+        $handler->pushProcessor(new StickyContextProcessor);
+
+        $logger->pushHandler($handler);
+
+        return $logger;
     }
 }
