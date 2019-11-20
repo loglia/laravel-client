@@ -2,6 +2,7 @@
 
 namespace Loglia\LaravelClient;
 
+use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
