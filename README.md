@@ -13,8 +13,8 @@
 
 The Loglia client requires the following be installed and available on your system:
 
-- Laravel 5.6+
-- PHP 7.1+
+- Laravel 5.4+
+- PHP 7.0+
 - cURL system library (available on the command line via `curl`)
 
 ## Quick start
@@ -23,17 +23,19 @@ The Loglia client requires the following be installed and available on your syst
 
     composer require loglia/laravel-client
     
-The package uses [package discovery](https://laravel.com/docs/5.6/packages#package-discovery) so you shouldn't need to add the service provider to `app.php`. If you've disabled package discovery in your app, add `Loglia\LaravelClient\LaravelClientServiceProvider::class` to the `providers` array in `app.php` manually.
+The package uses [package discovery](https://laravel.com/docs/master/packages#package-discovery) so you shouldn't need to add the service provider to `app.php`. If you've disabled package discovery in your app, or are using a Laravel version before 5.5, add `Loglia\LaravelClient\LaravelClientServiceProvider::class` to the `providers` array in `app.php` manually.
 
 **Secondly, publish the Loglia configuration file**.
 
     php artisan vendor:publish --tag=loglia
     
-You need an API key in order to send your application's logs to Loglia. Once you've set up your application in the Loglia UI, go to application settings and copy the API key into your project's environment variables.
+You need an API key in order to send your application's logs to Loglia. When creating an application in the Loglia UI, you will be given an API key. Copy it into your `.env` file:
 
     LOGLIA_KEY=ICJCaskOl6YQAmKaXgVbpvD6o9BUA311
 
 **Thirdly, configure your application to send its logs to Loglia**.
+
+*Note: If you're using a Laravel version before 5.6, you don't need to do this. The package automatically configures your logs to send to Loglia.*
 
 Crack open the `logging.php` config file and add this under the `channels` array:
 
