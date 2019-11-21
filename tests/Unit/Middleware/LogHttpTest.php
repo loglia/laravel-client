@@ -17,7 +17,7 @@ class LogHttpTest extends TestCase
      */
     private $middleware;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 

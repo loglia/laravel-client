@@ -43,7 +43,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @param string $endpoint
      */
-    public function setEndpoint(string $endpoint): void
+    public function setEndpoint(string $endpoint)
     {
         $this->endpoint = $endpoint;
     }
@@ -53,7 +53,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @param string $apiKey
      */
-    public function setApiKey(string $apiKey): void
+    public function setApiKey(string $apiKey)
     {
         $this->apiKey = $apiKey;
     }
@@ -63,7 +63,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @param bool $pretend
      */
-    public function setPretend(bool $pretend): void
+    public function setPretend(bool $pretend)
     {
         $this->pretend = $pretend;
     }
@@ -85,7 +85,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @throws LogliaException
      * @return string
      */
-    public function write(array $record): void
+    public function write(array $record)
     {
         $this->checkPayloadSize($record);
 
@@ -98,7 +98,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @param array $record
      * @throws LogliaException
      */
-    private function checkPayloadSize(array $record): void
+    private function checkPayloadSize(array $record)
     {
         if (($size = strlen($record['formatted'])) > static::MAX_PAYLOAD_SIZE) {
             throw new LogliaException(
@@ -117,7 +117,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @param string $postData
      * @return string
      */
-    private function send(string $postData): void
+    private function send(string $postData)
     {
         $parts = [
             'curl',

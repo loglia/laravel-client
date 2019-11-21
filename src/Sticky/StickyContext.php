@@ -17,7 +17,7 @@ class StickyContext
      * @param string $key
      * @param $value
      */
-    public static function add(string $key, $value): void
+    public static function add(string $key, $value)
     {
         static::$context[$key] = $value;
     }
@@ -35,7 +35,7 @@ class StickyContext
     /**
      * Clears away all sticky context data.
      */
-    public static function clear(): void
+    public static function clear()
     {
         static::$context = [];
     }
