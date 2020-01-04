@@ -21,17 +21,23 @@ The Loglia client requires the following be installed and available on your syst
 
 **Firstly, require the package with Composer**:
 
-    composer require loglia/laravel-client
+```bash
+composer require loglia/laravel-client
+```
     
 The package uses [package discovery](https://laravel.com/docs/master/packages#package-discovery) so you shouldn't need to add the service provider to `app.php`. If you've disabled package discovery in your app, or are using a Laravel version before 5.5, add `Loglia\LaravelClient\LaravelClientServiceProvider::class` to the `providers` array in `app.php` manually.
 
 **Secondly, publish the Loglia configuration file**.
 
-    php artisan vendor:publish --tag=loglia
+```bash
+php artisan vendor:publish --tag=loglia
+```
     
 You need an API key in order to send your application's logs to Loglia. When creating an application in the Loglia UI, you will be given an API key. Copy it into your `.env` file:
 
-    LOGLIA_KEY=ICJCaskOl6YQAmKaXgVbpvD6o9BUA311
+```
+LOGLIA_KEY=ICJCaskOl6YQAmKaXgVbpvD6o9BUA311
+```
 
 **Thirdly, configure your application to send its logs to Loglia**.
 
@@ -39,13 +45,17 @@ You need an API key in order to send your application's logs to Loglia. When cre
 
 Crack open the `logging.php` config file and add this under the `channels` array:
 
-    'loglia' => [
-        'driver' => 'loglia'
-    ]
+```php
+'loglia' => [
+    'driver' => 'loglia'
+],
+```
     
 Then change the `LOG_CHANNEL` environment variable in `.env` to use that channel.
 
-    LOG_CHANNEL=loglia
+```
+LOG_CHANNEL=loglia
+```
 
 You logs will now be sent to the application you have set up in the Loglia dashboard!
 
@@ -55,25 +65,31 @@ This package ships with a `LogHttp` middleware which can be used to log all of t
 
 If you would like to log all HTTP requests across your whole application, you can add the `LogHttp` middleware to your global middleware stack in `app/Http/Kernel.php`:
 
-    protected $middleware = [
-        // ... other middleware ...
-        \Loglia\LaravelClient\Middleware\LogHttp::class,
-    ];
+```php
+protected $middleware = [
+    // ... other middleware ...
+    \Loglia\LaravelClient\Middleware\LogHttp::class,
+];
+```
     
 Alternatively, you are free to assign the middleware a name in the `$routeMiddleware` array and assign it only to specific routes:
 
-    protected $routeMiddleware = [
-        // ... other middleware ...
-        'log.http' => \Loglia\LaravelClient\Middleware\LogHttp::class,
-    ];
+```php
+protected $routeMiddleware = [
+    // ... other middleware ...
+    'log.http' => \Loglia\LaravelClient\Middleware\LogHttp::class,
+];
+```
     
 And then use it as normal in your route definitions:
 
-    Route::group(['middleware' => ['log.http']], function () {
-        Route::get('/', function () {
-            return view('welcome');
-        });
+```php
+Route::group(['middleware' => ['log.http']], function () {
+    Route::get('/', function () {
+        return view('welcome');
     });
+});
+```
 
 ## Configuration
 
