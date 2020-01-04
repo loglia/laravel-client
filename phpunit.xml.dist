@@ -10,7 +10,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Retrospekt Laravel Client Test Suite">
+        <testsuite name="Loglia Laravel Client Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
