@@ -61,7 +61,7 @@ You logs will now be sent to the application you have set up in the Loglia dashb
 
 ## HTTP Logging
 
-This package ships with a `LogHttp` middleware which can be used to log all of the HTTP requests sent to your application. This functionality ships as middleware so that you have complete control over which routes log requests.
+This package ships with a `LogHttp` middleware which can be used to log all of the HTTP requests sent to your application. This functionality ships as middleware so that you have complete control over which of your routes log requests.
 
 If you would like to log all HTTP requests across your whole application, you can add the `LogHttp` middleware to your global middleware stack in `app/Http/Kernel.php`:
 
@@ -97,8 +97,8 @@ The package ships with a `loglia.php` configuration file that can be used to twe
 
 ### `api_key`
 
-This is the API key that will authenticate your application with Loglia. Without it, Loglia won't know which application the logs you are sending is for. You should generate an API key in your application settings and set its value here.
+This is the API key that will authenticate your application with Loglia. Without it, Loglia won't know which application to relate your logd with. You should generate an API key in your application settings and set its value here.
 
 ### `http.header_blacklist`
 
-When logging HTTP requests, Loglia will also capture the HTTP headers in the request and response. Some of these headers contain sensitive information such as credentials and sensitive cookies. This array contains a list of HTTP headers that should be scrubbed from the request and response before sending to Loglia. It is pre-filled with sensible defaults but you are free to add any header you want.
+When logging HTTP requests, Loglia will also capture the HTTP headers in the request and response. Some of these headers contain sensitive information such as credentials and cookies. This array contains a list of HTTP headers that should be scrubbed from the request and response before sending to Loglia. It is pre-filled with sensible defaults but you are free to add or remove any header you want.
