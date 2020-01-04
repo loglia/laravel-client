@@ -11,6 +11,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest, macOS-latest]
         php-versions: ['7.0', '7.1', '7.2', '7.3', '7.4']
+        composer-flags: ['--prefer-lowest', '']
     name: PHP ${{ matrix.php-versions }} test on ${{ matrix.operating-system }}
     steps:
     - name: Checkout
@@ -22,6 +23,6 @@ jobs:
         extensions: mbstring, dom
         coverage: xdebug
     - name: Install dependencies
-      run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+      run: composer update --no-progress --no-suggest --prefer-dist --optimize-autoloader ${{ matrix.composer-flags }}
     - name: Run test suite
       run: vendor/bin/phpunit --coverage-text
