@@ -21,6 +21,11 @@
             "Loglia\\LaravelClient\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Loglia\\LaravelClient\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
