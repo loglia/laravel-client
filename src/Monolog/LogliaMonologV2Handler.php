@@ -4,7 +4,7 @@ namespace Loglia\LaravelClient\Monolog;
 
 use Monolog\Handler\AbstractProcessingHandler;
 
-class LogliaMonologV1Handler extends AbstractProcessingHandler
+class LogliaMonologV2Handler extends AbstractProcessingHandler
 {
     use HandlesLogs;
 

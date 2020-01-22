@@ -6,7 +6,6 @@ use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
-use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaMonologV1Handler;
 use Loglia\LaravelClient\Monolog\LogliaMonologV2Handler;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
