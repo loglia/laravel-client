@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
+use Loglia\LaravelClient\Monolog\LogliaMonologV1Handler;
+use Loglia\LaravelClient\Monolog\LogliaMonologV2Handler;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
 use Monolog\Logger;
 
@@ -45,7 +47,13 @@ class LaravelClientServiceProvider extends ServiceProvider
      */
     public static function setUpLogger(Logger $logger)
     {
-        $handler = new LogliaHandler;
+        $handler = new LogliaMonologV2Handler;
+
+        if (Logger::API === 1) {
+            // Laravel allows monolog v1 or v2, if the application is using v1 we must
+            // use a handler compatible with monolog v1.
+            $handler = new LogliaMonologV1Handler;
+        }
 
         if (config('loglia.api_key')) {
             $handler->setApiKey(config('loglia.api_key'));
