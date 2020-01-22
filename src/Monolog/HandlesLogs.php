@@ -2,16 +2,10 @@
 
 namespace Loglia\LaravelClient\Monolog;
 
-use Monolog\Handler\AbstractProcessingHandler;
 use Loglia\LaravelClient\Exceptions\LogliaException;
 
-class LogliaHandler extends AbstractProcessingHandler
+trait HandlesLogs
 {
-    /**
-     * Logging payloads above this size will not be sent. Currently 100 KiB.
-     */
-    const MAX_PAYLOAD_SIZE = 102400;
-
     /**
      * The endpoint to send logs to.
      *
@@ -85,7 +79,7 @@ class LogliaHandler extends AbstractProcessingHandler
      * @throws LogliaException
      * @return string
      */
-    public function write(array $record)
+    public function sendToLoglia(array $record)
     {
         $this->checkPayloadSize($record);
 
@@ -100,11 +94,13 @@ class LogliaHandler extends AbstractProcessingHandler
      */
     private function checkPayloadSize(array $record)
     {
-        if (($size = strlen($record['formatted'])) > static::MAX_PAYLOAD_SIZE) {
+        $maxPayloadSize = 102400; // 100 KiB
+
+        if (($size = strlen($record['formatted'])) > $maxPayloadSize) {
             throw new LogliaException(
                 sprintf(
                     'Log payload too large. Must be %d bytes or less, was %d bytes',
-                    static::MAX_PAYLOAD_SIZE,
+                    $maxPayloadSize, // 100 KiB
                     $size
                 )
             );

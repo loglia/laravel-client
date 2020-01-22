@@ -2,10 +2,14 @@
 
 namespace Loglia\LaravelClient\Monolog;
 
-class LogliaMonologV1Handler extends LogliaHandler
+use Monolog\Handler\AbstractProcessingHandler;
+
+class LogliaMonologV1Handler extends AbstractProcessingHandler
 {
-    public function write(array $record)
+    use HandlesLogs;
+
+    protected function write(array $record)
     {
-        parent::write($record);
+        $this->sendToLoglia($record);
     }
 }
