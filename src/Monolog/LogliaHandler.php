@@ -122,9 +122,9 @@ class LogliaHandler extends AbstractProcessingHandler
         $parts = [
             'curl',
             '-H',
-            "'Authorization: Bearer {$this->apiKey}'",
+            escapeshellarg('Authorization: Bearer '.$this->apiKey),
             '-H',
-            "'Content-Type: application/json'",
+            escapeshellarg('Content-Type: application/json'),
             '-A',
             escapeshellarg($this->getUserAgent()),
             '-X POST',
