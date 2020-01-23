@@ -126,10 +126,10 @@ class LogliaHandler extends AbstractProcessingHandler
             '-H',
             "'Content-Type: application/json'",
             '-A',
-            $this->escapeArgument($this->getUserAgent()),
+            escapeshellarg($this->getUserAgent()),
             '-X POST',
             '-d',
-            $this->escapeArgument($postData),
+            escapeshellarg($postData),
             $this->endpoint,
             '> /dev/null 2>&1 &'
         ];
@@ -151,37 +151,5 @@ class LogliaHandler extends AbstractProcessingHandler
     private function getUserAgent(): string
     {
         return 'Loglia Laravel Client v2.1.1';
-    }
-
-    /**
-     * Escapes a shell argument.
-     *
-     * Extracted from: https://github.com/symfony/process/blob/v4.2.9/Process.php#L1613-L1633
-     * All credit goes to the original developers.
-     *
-     * @param string $argument
-     * @return string
-     */
-    private function escapeArgument(string $argument): string
-    {
-        if ($argument === '' || $argument === null) {
-            return '""';
-        }
-
-        if (\DIRECTORY_SEPARATOR !== '\\') {
-            return "'".str_replace("'", "'\\''", $argument)."'";
-        }
-
-        if (strpos($argument, "\0") !== false) {
-            $argument = str_replace("\0", '?', $argument);
-        }
-
-        if (! preg_match('/[\/()%!^"<>&|\s]/', $argument)) {
-            return $argument;
-        }
-
-        $argument = preg_replace('/(\\\\+)$/', '$1$1', $argument);
-
-        return '"'.str_replace(['"', '^', '%', '!', "\n"], ['""', '"^^"', '"^%"', '"^!"', '!LF!'], $argument).'"';
     }
 }
