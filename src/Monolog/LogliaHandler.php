@@ -32,11 +32,11 @@ class LogliaHandler extends AbstractProcessingHandler
     private $pretend = false;
 
     /**
-     * The last cURL command executed.
+     * The last HTTP request sent.
      *
      * @var string|null
      */
-    private $lastCommand = null;
+    private $lastRequest = null;
 
     /**
      * Allows the endpoint to send logs to be overridden if desired (e.g. for testing purposes).
@@ -69,13 +69,13 @@ class LogliaHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Returns the last cURL command executed.
+     * Returns the last HTTP request sent.
      *
      * @return string
      */
-    public function getLastCommand(): string
+    public function getLastRequest(): string
     {
-        return $this->lastCommand;
+        return $this->lastRequest;
     }
 
     /**
@@ -112,35 +112,28 @@ class LogliaHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sends the log to Loglia using an asynchronous cURL command.
+     * Sends the log to Loglia using a socket to avoid waiting for a response.
      *
      * @param string $postData
-     * @return string
      */
     private function send(string $postData)
     {
-        $parts = [
-            'curl',
-            '-H',
-            escapeshellarg('Authorization: Bearer '.$this->apiKey),
-            '-H',
-            escapeshellarg('Content-Type: application/json'),
-            '-A',
-            escapeshellarg($this->getUserAgent()),
-            '-X POST',
-            '-d',
-            escapeshellarg($postData),
-            $this->endpoint,
-            '> /dev/null 2>&1 &'
-        ];
+        $endpointParts = parse_url($this->endpoint);
+        $contentLength = strlen($postData);
 
-        $cmd = implode(' ', $parts);
+        $request = "POST / HTTP/1.1\r\n";
+        $request .= "Host: {$endpointParts['host']}\r\n";
+        $request .= "User-Agent: {$this->getUserAgent()}\r\n";
+        $request .= "Authorization: Bearer {$this->apiKey}\r\n";
+        $request .= "Content-Length: {$contentLength}\r\n";
+        $request .= "Content-Type: application/json\r\n\r\n";
+        $request .= $postData;
 
-        if (! $this->pretend) {
-            exec($cmd);
-        }
+        $socket = fsockopen('tls://'.$endpointParts['host'], $endpointParts['port'] ?? 443);
+        fwrite($socket, $request);
+        fclose($socket);
 
-        $this->lastCommand = $cmd;
+        $this->lastRequest = $request;
     }
 
     /**
@@ -150,6 +143,6 @@ class LogliaHandler extends AbstractProcessingHandler
      */
     private function getUserAgent(): string
     {
-        return 'Loglia Laravel Client v2.1.2';
+        return 'Loglia Laravel Client v2.2.0';
     }
 }

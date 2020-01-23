@@ -47,7 +47,15 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v2.1.2' -X POST -d '{\"hello\", \"world\"}' https://logs.loglia.app > /dev/null 2>&1 &", $handler->getLastCommand());
+        $expected = "POST / HTTP/1.1\r\n";
+        $expected .= "Host: logs.loglia.app\r\n";
+        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
+        $expected .= "Authorization: Bearer abc123\r\n";
+        $expected .= "Content-Length: 18\r\n";
+        $expected .= "Content-Type: application/json\r\n\r\n";
+        $expected .= "{\"hello\", \"world\"}";
+
+        $this->assertSame($expected, $handler->getLastRequest());
     }
 
     /** @test */
@@ -69,7 +77,15 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"hello", "world"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v2.1.2' -X POST -d '{\"hello\", \"world\"}' https://example.org > /dev/null 2>&1 &", $handler->getLastCommand());
+        $expected = "POST / HTTP/1.1\r\n";
+        $expected .= "Host: example.org\r\n";
+        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
+        $expected .= "Authorization: Bearer abc123\r\n";
+        $expected .= "Content-Length: 18\r\n";
+        $expected .= "Content-Type: application/json\r\n\r\n";
+        $expected .= "{\"hello\", \"world\"}";
+
+        $this->assertSame($expected, $handler->getLastRequest());
     }
 
     /** @test */
@@ -90,6 +106,14 @@ class LogliaHandlerTest extends TestCase
             'formatted' => '{"unicode", "§Ĭɮڡউ█👍"}'
         ]);
 
-        $this->assertSame("curl -H 'Authorization: Bearer abc123' -H 'Content-Type: application/json' -A 'Loglia Laravel Client v2.1.2' -X POST -d '{\"unicode\", \"§Ĭɮڡউ█👍\"}' https://logs.loglia.app > /dev/null 2>&1 &", $handler->getLastCommand());
+        $expected = "POST / HTTP/1.1\r\n";
+        $expected .= "Host: logs.loglia.app\r\n";
+        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
+        $expected .= "Authorization: Bearer abc123\r\n";
+        $expected .= "Content-Length: 33\r\n";
+        $expected .= "Content-Type: application/json\r\n\r\n";
+        $expected .= "{\"unicode\", \"§Ĭɮڡউ█👍\"}";
+
+        $this->assertSame($expected, $handler->getLastRequest());
     }
 }
