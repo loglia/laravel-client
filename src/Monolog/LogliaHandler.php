@@ -150,6 +150,6 @@ class LogliaHandler extends AbstractProcessingHandler
      */
     private function getUserAgent(): string
     {
-        return 'Loglia Laravel Client v2.1.1';
+        return 'Loglia Laravel Client v2.1.2';
     }
 }
