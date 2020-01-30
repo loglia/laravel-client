@@ -15,7 +15,6 @@ The Loglia client requires the following be installed and available on your syst
 
 - Laravel 5.4+
 - PHP 7.0+
-- cURL system library (available on the command line via `curl`)
 
 ## Quick start
 
@@ -97,7 +96,7 @@ The package ships with a `loglia.php` configuration file that can be used to twe
 
 ### `api_key`
 
-This is the API key that will authenticate your application with Loglia. Without it, Loglia won't know which application to relate your logd with. You should generate an API key in your application settings and set its value here.
+This is the API key that will authenticate your application with Loglia. Without it, Loglia won't know which application to relate your logs with. You should generate an API key in your application settings and set its value here.
 
 ### `http.header_blacklist`
 
