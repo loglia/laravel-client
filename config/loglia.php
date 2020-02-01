@@ -14,5 +14,20 @@ return [
          */
         'header_blacklist' => ['authorization', 'cookie', 'set-cookie', 'proxy-authenticate']
 
+    ],
+
+    'sql' => [
+
+        /**
+         * If you don't want to log all of the SQL queries that your app executes, set this to false.
+         */
+        'enabled' => true,
+
+        /**
+         * If you don't want to log SQL bindings that can contain sensitive information such as
+         * passwords, you can disable the logging of SQL bindings.
+         */
+        'log_bindings' => true
+
     ]
 ];

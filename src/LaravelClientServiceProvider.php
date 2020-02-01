@@ -2,7 +2,10 @@
 
 namespace Loglia\LaravelClient;
 
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Log\LogManager;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Middleware\LogHttp;
@@ -36,6 +39,25 @@ class LaravelClientServiceProvider extends ServiceProvider
         } else {
             // In older Laravel versions, modify Monolog to use the Loglia handler.
             LaravelClientServiceProvider::setUpLogger($this->app['log']->getMonolog());
+        }
+
+        if (config('loglia.sql.enabled', true)) {
+            DB::listen(function (QueryExecuted $query) {
+                $context = [
+                    '__loglia' => [
+                        'type' => 'sql',
+                        'query' => $query->sql,
+                        'connection' => $query->connectionName,
+                        'time' => $query->time
+                    ]
+                ];
+
+                if (config('loglia.sql.log_bindings', true)) {
+                    $context['__loglia']['bindings'] = $query->bindings;
+                }
+
+                Log::info('Executed SQL query', $context);
+            });
         }
     }
 
