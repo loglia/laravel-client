@@ -3,6 +3,7 @@
 namespace Loglia\LaravelClient;
 
 use Monolog\Logger;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -10,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Illuminate\Database\Events\QueryExecuted;
+use Loglia\LaravelClient\Sticky\StickyContext;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaTransport;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
@@ -28,7 +30,6 @@ class LaravelClientServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/loglia.php', 'loglia');
 
-        // TODO: singleton may not be needed
         $this->app->singleton(LogHttp::class);
 
         if ($this->app['log'] instanceof LogManager) {
@@ -41,8 +42,14 @@ class LaravelClientServiceProvider extends ServiceProvider
             LaravelClientServiceProvider::setUpLogger($this->app['log']->getMonolog());
         }
 
+        // Add a trace UUID which can be used to correlate a collection of logs together.
+        StickyContext::add('__loglia', [
+            'trace_uuid' => Uuid::uuid4()->toString()
+        ]);
+
         DB::listen(function (QueryExecuted $query) {
-            // Checked inside ::listen to allow the user to toggle SQL logging on and off during runtime.
+            // Checked inside ::listen to allow the user to toggle SQL logging on and off
+            // by changing config at runtime.
             if (! config('loglia.sql.enabled', true)) {
                 return;
             }

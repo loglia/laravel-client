@@ -23,6 +23,20 @@ class StickyContextTest extends TestCase
         $this->assertSame(['foo' => 'bar'], StickyContext::all(), 'Was expecting sticky context to have foo => bar');
     }
 
+    /** @test */
+    public function it_will_merge_sticky_context_together()
+    {
+        StickyContext::add('foo', ['bar' => 'baz']);
+        StickyContext::add('foo', ['qux' => 'quux']);
+
+        $this->assertSame([
+            'foo' => [
+                'bar' => 'baz',
+                'qux' => 'quux'
+            ]
+        ], StickyContext::all(), 'Was expected sticky context to have merged sticky context');
+    }
+
     /**
      * @test
      */

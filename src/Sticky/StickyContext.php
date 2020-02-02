@@ -19,7 +19,11 @@ class StickyContext
      */
     public static function add(string $key, $value)
     {
-        static::$context[$key] = $value;
+        if (is_array($value)) {
+            static::$context[$key] = array_merge_recursive(static::$context[$key] ?? [], $value);
+        } else {
+            static::$context[$key] = $value;
+        }
     }
 
     /**
