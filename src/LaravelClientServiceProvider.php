@@ -2,7 +2,11 @@
 
 namespace Loglia\LaravelClient;
 
+use Illuminate\Database\Concerns\BuildsQueries;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -47,12 +51,34 @@ class LaravelClientServiceProvider extends ServiceProvider
                 return;
             }
 
+            $classesToRemoveFromTrace = [
+                LaravelClientServiceProvider::class,
+                \Illuminate\Events\Dispatcher::class,
+                \Illuminate\Database\Connection::class,
+                \Illuminate\Database\Query\Builder::class,
+                \Illuminate\Database\Eloquent\Builder::class,
+                \Illuminate\Database\Concerns\BuildsQueries::class
+            ];
+
+            $fullTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+            $counter = 0;
+            foreach ($fullTrace as $frame) {
+                if (in_array($frame['class'], $classesToRemove)) {
+                    $counter++;
+                    continue;
+                }
+
+                $relevantTrace = array_slice($trace, $counter - 1);
+            }
+
             $context = [
                 '__loglia' => [
                     'type' => 'sql',
                     'query' => $query->sql,
                     'connection' => $query->connectionName,
-                    'time' => $query->time
+                    'time' => $query->time,
+                    'trace' => $relevantTrace
                 ]
             ];
 
