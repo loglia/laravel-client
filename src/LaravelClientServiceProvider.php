@@ -2,22 +2,18 @@
 
 namespace Loglia\LaravelClient;
 
-use Illuminate\Database\Concerns\BuildsQueries;
-use Illuminate\Database\Connection;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Events\Dispatcher;
+use Monolog\Logger;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Middleware\LogHttp;
-use Loglia\LaravelClient\Monolog\LogliaFormatter;
+use Illuminate\Database\Events\QueryExecuted;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaTransport;
+use Loglia\LaravelClient\Monolog\LogliaFormatter;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
-use Monolog\Logger;
 
 class LaravelClientServiceProvider extends ServiceProvider
 {
