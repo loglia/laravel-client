@@ -41,24 +41,27 @@ class LaravelClientServiceProvider extends ServiceProvider
             LaravelClientServiceProvider::setUpLogger($this->app['log']->getMonolog());
         }
 
-        if (config('loglia.sql.enabled', true)) {
-            DB::listen(function (QueryExecuted $query) {
-                $context = [
-                    '__loglia' => [
-                        'type' => 'sql',
-                        'query' => $query->sql,
-                        'connection' => $query->connectionName,
-                        'time' => $query->time
-                    ]
-                ];
+        DB::listen(function (QueryExecuted $query) {
+            // Checked inside ::listen to allow the user to toggle SQL logging on and off during runtime.
+            if (! config('loglia.sql.enabled', true)) {
+                return;
+            }
 
-                if (config('loglia.sql.log_bindings', true)) {
-                    $context['__loglia']['bindings'] = $query->bindings;
-                }
+            $context = [
+                '__loglia' => [
+                    'type' => 'sql',
+                    'query' => $query->sql,
+                    'connection' => $query->connectionName,
+                    'time' => $query->time
+                ]
+            ];
 
-                Log::info('Executed SQL query', $context);
-            });
-        }
+            if (config('loglia.sql.log_bindings', true)) {
+                $context['__loglia']['bindings'] = $query->bindings;
+            }
+
+            Log::info('Executed SQL query', $context);
+        });
     }
 
     /**
