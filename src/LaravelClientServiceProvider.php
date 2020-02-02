@@ -57,15 +57,16 @@ class LaravelClientServiceProvider extends ServiceProvider
             ];
 
             $fullTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            $relevantTrace = $fullTrace;
 
             $counter = 0;
             foreach ($fullTrace as $frame) {
-                if (in_array($frame['class'], $classesToRemove)) {
+                if (in_array($frame['class'], $classesToRemoveFromTrace)) {
                     $counter++;
                     continue;
                 }
 
-                $relevantTrace = array_slice($trace, $counter - 1);
+                $relevantTrace = array_slice($fullTrace, $counter - 1);
             }
 
             $context = [
