@@ -34,7 +34,11 @@ class LogHttp
             ]
         ]);
 
-        $this->start = microtime(true);
+        if (defined('LARAVEL_START')) {
+            $this->start = LARAVEL_START;
+        } else {
+            $this->start = microtime(true);
+        }
 
         return $next($request);
     }
