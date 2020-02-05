@@ -81,7 +81,7 @@ class LaravelClientServiceProvider extends ServiceProvider
                     'type' => 'sql',
                     'query' => $query->sql,
                     'connection' => $query->connectionName,
-                    'time' => $query->time,
+                    'took' => $query->time,
 //                    'trace' => $relevantTrace
                 ]
             ];
