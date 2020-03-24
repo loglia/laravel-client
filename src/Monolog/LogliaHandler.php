@@ -17,7 +17,7 @@ class LogliaHandler extends AbstractProcessingHandler
      *
      * @var string
      */
-    private $endpoint = 'https://logs.loglia.app';
+    private $endpoint = 'logs-udp.loglia.app:1065';
 
     /**
      * @var string
@@ -89,6 +89,8 @@ class LogliaHandler extends AbstractProcessingHandler
     {
         $this->checkPayloadSize($record);
 
+        // TODO: add application API key and package version
+
         $this->send($record['formatted']);
     }
 
@@ -112,37 +114,37 @@ class LogliaHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Sends the log to Loglia using a socket to avoid waiting for a response.
+     * Sends the log to Loglia.
      *
-     * @param string $postData
+     * @param string $log
+     * @throws LogliaException
      */
-    private function send(string $postData)
+    private function send(string $log)
     {
-        $endpointParts = parse_url($this->endpoint);
-        $contentLength = strlen($postData);
+        $endpoint = parse_url($this->endpoint);
 
-        $request = "POST / HTTP/1.1\r\n";
-        $request .= "Host: {$endpointParts['host']}\r\n";
-        $request .= "User-Agent: {$this->getUserAgent()}\r\n";
-        $request .= "Authorization: Bearer {$this->apiKey}\r\n";
-        $request .= "Content-Length: {$contentLength}\r\n";
-        $request .= "Content-Type: application/json\r\n\r\n";
-        $request .= $postData;
+        $hash = hash('sha256', $log);
+        $parts = str_split($log, 441);
 
-        $socket = fsockopen('tls://'.$endpointParts['host'], $endpointParts['port'] ?? 443);
-        fwrite($socket, $request);
-        fclose($socket);
+        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 
-        $this->lastRequest = $request;
-    }
+        if (!$socket) {
+            throw new LogliaException(
+                sprintf(
+                    'Failed to open socket connection to logging server: %s',
+                    socket_strerror(socket_last_error())
+                )
+            );
+        }
 
-    /**
-     * Returns the user agent string to send with the log.
-     *
-     * @return string
-     */
-    private function getUserAgent(): string
-    {
-        return 'Loglia Laravel Client v2.2.0';
+        $sequence = 0;
+        foreach ($parts as $part) {
+            $message = $hash . sprintf('%03d', $sequence) . $part;
+            socket_sendto($socket, $message, strlen($message), 0, $endpoint['host'], $endpoint['port']);
+
+            $sequence++;
+        }
+
+        socket_close($socket);
     }
 }
