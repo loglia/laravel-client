@@ -108,7 +108,6 @@ class LogliaHandler extends AbstractProcessingHandler
         $sequence = 0;
         foreach ($parts as $part) {
             $message = $this->apiKey . $hash . sprintf('%03d', $sequence) . $part;
-            dd($this->apiKey, $hash, sprintf('%03d', $sequence), $part);
             socket_sendto($this->socket, $message, strlen($message), 0, $endpoint['host'], $endpoint['port']);
 
             $sequence++;
