@@ -2,6 +2,7 @@
 
 namespace Loglia\LaravelClient\Monolog;
 
+use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 use Loglia\LaravelClient\Exceptions\LogliaException;
 
@@ -25,57 +26,37 @@ class LogliaHandler extends AbstractProcessingHandler
     private $apiKey;
 
     /**
-     * Determines whether we pretend to send the log message.
-     *
-     * @var bool
+     * @var resource|null
      */
-    private $pretend = false;
+    private $socket;
 
-    /**
-     * The last HTTP request sent.
-     *
-     * @var string|null
-     */
-    private $lastRequest = null;
-
-    /**
-     * Allows the endpoint to send logs to be overridden if desired (e.g. for testing purposes).
-     *
-     * @param string $endpoint
-     */
-    public function setEndpoint(string $endpoint)
+    public function __construct($level = Logger::DEBUG, $bubble = true)
     {
-        $this->endpoint = $endpoint;
+        parent::__construct($level, $bubble);
+
+        if (!$this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+            throw new LogliaException(
+                sprintf(
+                    'Failed to open socket connection to logging server: %s',
+                    socket_strerror(socket_last_error())
+                )
+            );
+        }
     }
 
-    /**
-     * Sets the API key for authenticated requests when sending logs.
-     *
-     * @param string $apiKey
-     */
+    public function close()
+    {
+        parent::close();
+
+        if (is_resource($this->socket)) {
+            socket_close($this->socket);
+            $this->socket = null;
+        }
+    }
+
     public function setApiKey(string $apiKey)
     {
         $this->apiKey = $apiKey;
-    }
-
-    /**
-     * Allows for us to pretend to send the log message. Useful for testing purposes.
-     *
-     * @param bool $pretend
-     */
-    public function setPretend(bool $pretend)
-    {
-        $this->pretend = $pretend;
-    }
-
-    /**
-     * Returns the last HTTP request sent.
-     *
-     * @return string
-     */
-    public function getLastRequest(): string
-    {
-        return $this->lastRequest;
     }
 
     /**
@@ -88,8 +69,6 @@ class LogliaHandler extends AbstractProcessingHandler
     public function write(array $record)
     {
         $this->checkPayloadSize($record);
-
-        // TODO: add application API key and package version
 
         $this->send($record['formatted']);
     }
@@ -123,28 +102,16 @@ class LogliaHandler extends AbstractProcessingHandler
     {
         $endpoint = parse_url($this->endpoint);
 
-        $hash = hash('sha256', $log);
+        $hash = substr(hash('sha256', $log), 0, 32);
         $parts = str_split($log, 441);
-
-        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-
-        if (!$socket) {
-            throw new LogliaException(
-                sprintf(
-                    'Failed to open socket connection to logging server: %s',
-                    socket_strerror(socket_last_error())
-                )
-            );
-        }
 
         $sequence = 0;
         foreach ($parts as $part) {
-            $message = $hash . sprintf('%03d', $sequence) . $part;
-            socket_sendto($socket, $message, strlen($message), 0, $endpoint['host'], $endpoint['port']);
+            $message = $this->apiKey . $hash . sprintf('%03d', $sequence) . $part;
+            dd($this->apiKey, $hash, sprintf('%03d', $sequence), $part);
+            socket_sendto($this->socket, $message, strlen($message), 0, $endpoint['host'], $endpoint['port']);
 
             $sequence++;
         }
-
-        socket_close($socket);
     }
 }
