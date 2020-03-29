@@ -4,9 +4,11 @@ namespace Loglia\LaravelClient;
 
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
+use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
+use Loglia\LaravelClient\Monolog\LogliaTransport;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
 use Monolog\Logger;
 
@@ -41,22 +43,15 @@ class LaravelClientServiceProvider extends ServiceProvider
      * Sets up and returns the provided Monolog logger.
      *
      * @param Logger $logger
+     * @throws LogliaException
      * @return Logger
      */
     public static function setUpLogger(Logger $logger)
     {
-        $handler = new LogliaHandler;
+        $transport = new LogliaTransport(config('loglia.api_key'));
 
-        if (config('loglia.api_key')) {
-            $handler->setApiKey(config('loglia.api_key'));
-        }
-
-        if (config('loglia.endpoint')) {
-            $handler->setEndpoint(config('loglia.endpoint'));
-        }
-
+        $handler = new LogliaHandler($transport);
         $handler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
-
         $handler->pushProcessor(new StickyContextProcessor);
 
         $logger->pushHandler($handler);

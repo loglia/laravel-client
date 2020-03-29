@@ -14,49 +14,22 @@ class LogliaHandler extends AbstractProcessingHandler
     const MAX_PAYLOAD_SIZE = 102400;
 
     /**
-     * The endpoint to send logs to.
-     *
-     * @var string
+     * @var TransportInterface
      */
-    private $endpoint = 'logs-udp.loglia.app:1065';
+    private $transport;
 
-    /**
-     * @var string
-     */
-    private $apiKey;
-
-    /**
-     * @var resource|null
-     */
-    private $socket;
-
-    public function __construct($level = Logger::DEBUG, $bubble = true)
+    public function __construct(TransportInterface $transport)
     {
-        parent::__construct($level, $bubble);
+        parent::__construct(Logger::DEBUG, true);
 
-        if (!$this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
-            throw new LogliaException(
-                sprintf(
-                    'Failed to open socket connection to logging server: %s',
-                    socket_strerror(socket_last_error())
-                )
-            );
-        }
+        $this->transport = $transport;
     }
 
     public function close()
     {
         parent::close();
 
-        if (is_resource($this->socket)) {
-            socket_close($this->socket);
-            $this->socket = null;
-        }
-    }
-
-    public function setApiKey(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
+        $this->transport->close();
     }
 
     /**
@@ -70,7 +43,7 @@ class LogliaHandler extends AbstractProcessingHandler
     {
         $this->checkPayloadSize($record);
 
-        $this->send($record['formatted']);
+        $this->transport->send($record['formatted']);
     }
 
     /**
@@ -89,28 +62,6 @@ class LogliaHandler extends AbstractProcessingHandler
                     $size
                 )
             );
-        }
-    }
-
-    /**
-     * Sends the log to Loglia.
-     *
-     * @param string $log
-     * @throws LogliaException
-     */
-    private function send(string $log)
-    {
-        $endpoint = parse_url($this->endpoint);
-
-        $hash = substr(hash('sha256', $log), 0, 32);
-        $parts = str_split($log, 441);
-
-        $sequence = 0;
-        foreach ($parts as $part) {
-            $message = $this->apiKey . $hash . sprintf('%03d', $sequence) . $part;
-            socket_sendto($this->socket, $message, strlen($message), 0, $endpoint['host'], $endpoint['port']);
-
-            $sequence++;
         }
     }
 }
