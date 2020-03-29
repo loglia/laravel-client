@@ -2,11 +2,31 @@
 
 namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
+use Illuminate\Support\Facades\Log;
+use Loglia\LaravelClient\Monolog\MemoryTransport;
 use PHPUnit\Framework\TestCase;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 
 class LogliaHandlerTest extends TestCase
 {
+    /**
+     * @var MemoryTransport
+     */
+    private $transport;
+
+    /**
+     * @var LogliaHandler
+     */
+    private $handler;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->transport = new MemoryTransport;
+        $this->handler = new LogliaHandler($this->transport);
+    }
+
     /**
      * @test
      * @expectedException Loglia\LaravelClient\Exceptions\LogliaException
@@ -14,10 +34,7 @@ class LogliaHandlerTest extends TestCase
      */
     public function it_throws_exception_if_payload_is_over_max_size()
     {
-        $handler = new LogliaHandler;
-        $handler->setPretend(true);
-
-        $handler->write([
+        $this->handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -30,13 +47,9 @@ class LogliaHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_sends_the_log_to_loglia_by_default()
+    public function it_sends_logs_through_the_transport()
     {
-        $handler = new LogliaHandler;
-        $handler->setPretend(true);
-        $handler->setApiKey('abc123');
-
-        $handler->write([
+        $this->handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -44,29 +57,10 @@ class LogliaHandlerTest extends TestCase
             'channel' => 'local',
             'datetime' => new \DateTime,
             'extra' => [],
-            'formatted' => '{"hello", "world"}'
+            'formatted' => '{"foo":"bar"}'
         ]);
 
-        $expected = "POST / HTTP/1.1\r\n";
-        $expected .= "Host: logs.loglia.app\r\n";
-        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
-        $expected .= "Authorization: Bearer abc123\r\n";
-        $expected .= "Content-Length: 18\r\n";
-        $expected .= "Content-Type: application/json\r\n\r\n";
-        $expected .= "{\"hello\", \"world\"}";
-
-        $this->assertSame($expected, $handler->getLastRequest());
-    }
-
-    /** @test */
-    public function it_sends_the_log_to_different_endpoint_when_configured()
-    {
-        $handler = new LogliaHandler;
-        $handler->setPretend(true);
-        $handler->setEndpoint('https://example.org');
-        $handler->setApiKey('abc123');
-
-        $handler->write([
+        $this->handler->write([
             'message' => 'Hello world',
             'context' => [],
             'level' => 200,
@@ -74,46 +68,11 @@ class LogliaHandlerTest extends TestCase
             'channel' => 'local',
             'datetime' => new \DateTime,
             'extra' => [],
-            'formatted' => '{"hello", "world"}'
+            'formatted' => '{"bin":"baz"}'
         ]);
 
-        $expected = "POST / HTTP/1.1\r\n";
-        $expected .= "Host: example.org\r\n";
-        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
-        $expected .= "Authorization: Bearer abc123\r\n";
-        $expected .= "Content-Length: 18\r\n";
-        $expected .= "Content-Type: application/json\r\n\r\n";
-        $expected .= "{\"hello\", \"world\"}";
-
-        $this->assertSame($expected, $handler->getLastRequest());
-    }
-
-    /** @test */
-    public function it_supports_unicode_characters_in_logging_payload()
-    {
-        $handler = new LogliaHandler;
-        $handler->setPretend(true);
-        $handler->setApiKey('abc123');
-
-        $handler->write([
-            'message' => 'Hello world',
-            'context' => [],
-            'level' => 200,
-            'level_name' => 'INFO',
-            'channel' => 'local',
-            'datetime' => new \DateTime,
-            'extra' => [],
-            'formatted' => '{"unicode", "§Ĭɮڡউ█👍"}'
-        ]);
-
-        $expected = "POST / HTTP/1.1\r\n";
-        $expected .= "Host: logs.loglia.app\r\n";
-        $expected .= "User-Agent: Loglia Laravel Client v2.2.0\r\n";
-        $expected .= "Authorization: Bearer abc123\r\n";
-        $expected .= "Content-Length: 33\r\n";
-        $expected .= "Content-Type: application/json\r\n\r\n";
-        $expected .= "{\"unicode\", \"§Ĭɮڡউ█👍\"}";
-
-        $this->assertSame($expected, $handler->getLastRequest());
+        $this->assertCount(2, $this->transport->logs);
+        $this->assertSame('{"foo":"bar"}', $this->transport->logs[0]);
+        $this->assertSame('{"bin":"baz"}', $this->transport->logs[1]);
     }
 }
