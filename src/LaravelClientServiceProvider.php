@@ -76,6 +76,10 @@ class LaravelClientServiceProvider extends ServiceProvider
                 $relevantTrace = array_slice($fullTrace, $counter - 1);
             }
 
+            foreach ($relevantTrace as $index => $frame) {
+                unset($relevantTrace[$index]['type']);
+            }
+
             $context = [
                 '__loglia' => [
                     'type' => 'sql',
