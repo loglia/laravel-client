@@ -68,7 +68,7 @@ class LaravelClientServiceProvider extends ServiceProvider
 
             $counter = 0;
             foreach ($fullTrace as $frame) {
-                if (in_array($frame['class'], $classesToRemoveFromTrace)) {
+                if (empty($frame['class']) || in_array($frame['class'], $classesToRemoveFromTrace)) {
                     $counter++;
                     continue;
                 }
