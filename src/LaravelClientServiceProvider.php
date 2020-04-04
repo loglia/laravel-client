@@ -63,18 +63,18 @@ class LaravelClientServiceProvider extends ServiceProvider
                 \Illuminate\Database\Concerns\BuildsQueries::class
             ];
 
-//            $fullTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-//            $relevantTrace = $fullTrace;
-//
-//            $counter = 0;
-//            foreach ($fullTrace as $frame) {
-//                if (in_array($frame['class'], $classesToRemoveFromTrace)) {
-//                    $counter++;
-//                    continue;
-//                }
-//
-//                $relevantTrace = array_slice($fullTrace, $counter - 1);
-//            }
+            $fullTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            $relevantTrace = $fullTrace;
+
+            $counter = 0;
+            foreach ($fullTrace as $frame) {
+                if (in_array($frame['class'], $classesToRemoveFromTrace)) {
+                    $counter++;
+                    continue;
+                }
+
+                $relevantTrace = array_slice($fullTrace, $counter - 1);
+            }
 
             $context = [
                 '__loglia' => [
@@ -82,7 +82,7 @@ class LaravelClientServiceProvider extends ServiceProvider
                     'query' => $query->sql,
                     'connection' => $query->connectionName,
                     'took' => $query->time,
-//                    'trace' => $relevantTrace
+                    'trace' => $relevantTrace
                 ]
             ];
 
