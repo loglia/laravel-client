@@ -103,3 +103,25 @@ This is the API key that will authenticate your application with Loglia. Without
 ### `http.header_blacklist`
 
 When logging HTTP requests, Loglia will also capture the HTTP headers in the request and response. Some of these headers contain sensitive information such as credentials and cookies. This array contains a list of HTTP headers that should be scrubbed from the request and response before sending to Loglia. It is pre-filled with sensible defaults but you are free to add or remove any header you want.
+
+### `sql.enabled`
+
+You can use this config value to turn SQL logging on or off. We recommend you have it on to help you identify slow queries, but you are free to turn it off if it's eating away at your logging quota. If you'd like to enable SQL logging for certain endpoints or slow code paths, you are also able to configure this value during runtime:
+
+    config(['loglia.sql.enabled' => true]);
+
+### `sql.log_bindings`
+
+By default Loglia will also log the SQL query bindings. For example, in this query:
+
+`UPDATE users SET active = 1 WHERE id = 14`
+
+the bindings are `1` and `14`. As you can imagine, SQL bindings can contain sensitive information which is why you can turn this feature off. If you want this feature enabled globally, but turned off when handling sensitive information (such as a login flow), it can be changed during runtime using:
+
+    config(['loglia.sql.log_bindings' => true]);
+    
+### `sql.log_traces`
+
+Loglia will attempt to generate and send a backtrace with every SQL query. This helps us show you where queries originate from, so that you can track them down easily in your codebase. While no negative impact to performance has been noted with this feature enabled, you are again free to turn it off complete or during runtime:
+
+    config(['loglia.sql.log_traces' => true]);
