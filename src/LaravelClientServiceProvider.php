@@ -8,13 +8,13 @@ use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
-use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Middleware\LogHttp;
 use Illuminate\Database\Events\QueryExecuted;
 use Loglia\LaravelClient\Sticky\StickyContext;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaTransport;
 use Loglia\LaravelClient\Monolog\LogliaFormatter;
+use Loglia\LaravelClient\Exceptions\LogliaException;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
 
 class LaravelClientServiceProvider extends ServiceProvider
@@ -54,30 +54,10 @@ class LaravelClientServiceProvider extends ServiceProvider
                 return;
             }
 
-            $classesToRemoveFromTrace = [
-                LaravelClientServiceProvider::class,
-                \Illuminate\Events\Dispatcher::class,
-                \Illuminate\Database\Connection::class,
-                \Illuminate\Database\Query\Builder::class,
-                \Illuminate\Database\Eloquent\Builder::class,
-                \Illuminate\Database\Concerns\BuildsQueries::class
-            ];
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-            $fullTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            $relevantTrace = $fullTrace;
-
-            $counter = 0;
-            foreach ($fullTrace as $frame) {
-                if (empty($frame['class']) || in_array($frame['class'], $classesToRemoveFromTrace)) {
-                    $counter++;
-                    continue;
-                }
-
-                $relevantTrace = array_slice($fullTrace, $counter - 1);
-            }
-
-            foreach ($relevantTrace as $index => $frame) {
-                unset($relevantTrace[$index]['type']);
+            foreach ($trace as $index => $frame) {
+                unset($trace[$index]['type']);
             }
 
             $context = [
@@ -86,7 +66,7 @@ class LaravelClientServiceProvider extends ServiceProvider
                     'query' => $query->sql,
                     'connection' => $query->connectionName,
                     'took' => $query->time,
-                    'trace' => $relevantTrace
+                    'trace' => $trace
                 ]
             ];
 
