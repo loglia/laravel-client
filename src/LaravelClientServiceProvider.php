@@ -50,7 +50,7 @@ class LaravelClientServiceProvider extends ServiceProvider
         DB::listen(function (QueryExecuted $query) {
             // Checked inside ::listen to allow the user to toggle SQL logging on and off
             // by changing config at runtime.
-            if (! config('loglia.sql.enabled', true)) {
+            if (!config('loglia.sql.enabled', true)) {
                 return;
             }
 
