@@ -54,7 +54,11 @@ class LaravelClientServiceProvider extends ServiceProvider
                 return;
             }
 
-            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            if (config('loglia.sql.log_traces', true)) {
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            } else {
+                $trace = [];
+            }
 
             foreach ($trace as $index => $frame) {
                 unset($trace[$index]['type']);
