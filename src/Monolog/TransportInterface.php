@@ -4,7 +4,5 @@ namespace Loglia\LaravelClient\Monolog;
 
 interface TransportInterface
 {
-    public function send(string $message);
-
-    public function close();
+    public function send(array $logs);
 }
