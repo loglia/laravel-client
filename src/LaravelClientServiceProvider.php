@@ -57,7 +57,7 @@ class LaravelClientServiceProvider extends ServiceProvider
 
         $logger->pushHandler(new BufferHandler(
             $logliaHandler,
-            25,
+            50,
             Logger::DEBUG,
             true,
             true
