@@ -10,6 +10,7 @@ use Loglia\LaravelClient\Monolog\LogliaFormatter;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
 use Loglia\LaravelClient\Monolog\LogliaTransport;
 use Loglia\LaravelClient\Sticky\StickyContextProcessor;
+use Monolog\Handler\BufferHandler;
 use Monolog\Logger;
 
 class LaravelClientServiceProvider extends ServiceProvider
@@ -50,11 +51,17 @@ class LaravelClientServiceProvider extends ServiceProvider
     {
         $transport = new LogliaTransport(config('loglia.api_key'));
 
-        $handler = new LogliaHandler($transport);
-        $handler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
-        $handler->pushProcessor(new StickyContextProcessor);
+        $logliaHandler = new LogliaHandler($transport);
+        $logliaHandler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
+        $logliaHandler->pushProcessor(new StickyContextProcessor);
 
-        $logger->pushHandler($handler);
+        $logger->pushHandler(new BufferHandler(
+            $logliaHandler,
+            25,
+            Logger::DEBUG,
+            true,
+            true
+        ));
 
         return $logger;
     }
