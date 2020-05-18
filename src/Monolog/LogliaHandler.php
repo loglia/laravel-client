@@ -34,10 +34,16 @@ class LogliaHandler extends AbstractProcessingHandler
 
     public function handleBatch(array $records)
     {
+        $postData = json_encode($records, JSON_THROW_ON_ERROR);
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,'https://en9lpi8h4uojv.x.pipedream.net');
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($records, JSON_THROW_ON_ERROR));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($postData))
+        );
         curl_exec($ch);
         curl_close ($ch);
     }
