@@ -4,7 +4,6 @@ namespace Loglia\LaravelClient\Monolog;
 
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
-use Loglia\LaravelClient\Exceptions\LogliaException;
 
 class LogliaHandler extends AbstractProcessingHandler
 {
@@ -39,5 +38,10 @@ class LogliaHandler extends AbstractProcessingHandler
         }
 
         $this->transport->send($records);
+    }
+
+    public function write(array $record)
+    {
+        // TODO: this method is not needed, perhaps we don't need to extend AbstractHandler?
     }
 }
