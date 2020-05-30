@@ -32,7 +32,7 @@ class LogliaTransport implements TransportInterface
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            sprintf('Authorization: %s', $this->apiKey),
+            sprintf('Authorization: Bearer %s', $this->apiKey),
             'Content-Type: application/json'
         ]);
         curl_exec($ch);
