@@ -2,14 +2,12 @@
 
 namespace Loglia\LaravelClient\Monolog;
 
-use Loglia\LaravelClient\Exceptions\LogliaException;
-
 class LogliaTransport implements TransportInterface
 {
     /**
      * @var string
      */
-    private $endpoint = 'https://logs.loglia.xyz';
+    private $endpoint = 'https://logs.loglia.app';
 
     /**
      * @var string

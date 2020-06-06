@@ -8,11 +8,6 @@ use Monolog\Handler\AbstractProcessingHandler;
 class LogliaHandler extends AbstractProcessingHandler
 {
     /**
-     * Logging payloads above this size will not be sent. Currently 100 KiB.
-     */
-    const MAX_PAYLOAD_SIZE = 102400;
-
-    /**
      * @var TransportInterface
      */
     private $transport;

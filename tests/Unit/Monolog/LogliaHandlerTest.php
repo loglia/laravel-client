@@ -2,10 +2,10 @@
 
 namespace Loglia\LaravelClient\Tests\Unit\Monolog;
 
-use Illuminate\Support\Facades\Log;
-use Loglia\LaravelClient\Monolog\MemoryTransport;
+use Loglia\LaravelClient\Monolog\LogliaFormatter;
 use PHPUnit\Framework\TestCase;
 use Loglia\LaravelClient\Monolog\LogliaHandler;
+use Loglia\LaravelClient\Monolog\MemoryTransport;
 
 class LogliaHandlerTest extends TestCase
 {
@@ -25,54 +25,37 @@ class LogliaHandlerTest extends TestCase
 
         $this->transport = new MemoryTransport;
         $this->handler = new LogliaHandler($this->transport);
-    }
-
-    /**
-     * @test
-     * @expectedException Loglia\LaravelClient\Exceptions\LogliaException
-     * @expectedExceptionMessage Log payload too large. Must be 102400 bytes or less, was 102401 bytes
-     */
-    public function it_throws_exception_if_payload_is_over_max_size()
-    {
-        $this->handler->write([
-            'message' => 'Hello world',
-            'context' => [],
-            'level' => 200,
-            'level_name' => 'INFO',
-            'channel' => 'local',
-            'datetime' => new \DateTime,
-            'extra' => [],
-            'formatted' => str_repeat('a', LogliaHandler::MAX_PAYLOAD_SIZE + 1)
-        ]);
+        $this->handler->setFormatter(new LogliaFormatter(\DateTime::ISO8601));
     }
 
     /** @test */
     public function it_sends_logs_through_the_transport()
     {
-        $this->handler->write([
-            'message' => 'Hello world',
-            'context' => [],
-            'level' => 200,
-            'level_name' => 'INFO',
-            'channel' => 'local',
-            'datetime' => new \DateTime,
-            'extra' => [],
-            'formatted' => '{"foo":"bar"}'
-        ]);
+        $time = new \DateTime('2020-01-01');
 
-        $this->handler->write([
-            'message' => 'Hello world',
-            'context' => [],
-            'level' => 200,
-            'level_name' => 'INFO',
-            'channel' => 'local',
-            'datetime' => new \DateTime,
-            'extra' => [],
-            'formatted' => '{"bin":"baz"}'
+        $this->handler->handleBatch([
+            [
+                'message' => 'Hello world',
+                'context' => [],
+                'level' => 200,
+                'level_name' => 'INFO',
+                'channel' => 'local',
+                'datetime' => $time,
+                'extra' => []
+            ],
+            [
+                'message' => 'Hello world',
+                'context' => [],
+                'level' => 200,
+                'level_name' => 'INFO',
+                'channel' => 'local',
+                'datetime' => $time,
+                'extra' => []
+            ],
         ]);
 
         $this->assertCount(2, $this->transport->logs);
-        $this->assertSame('{"foo":"bar"}', $this->transport->logs[0]);
-        $this->assertSame('{"bin":"baz"}', $this->transport->logs[1]);
+        $this->assertSame('{"message":"Hello world","context":[],"level":200,"extra":{"__loglia":{"type":"log"}},"timestamp":1577836800000}', $this->transport->logs[0]);
+        $this->assertSame('{"message":"Hello world","context":[],"level":200,"extra":{"__loglia":{"type":"log"}},"timestamp":1577836800000}', $this->transport->logs[1]);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Loglia\LaravelClient\Monolog;
 
-use Loglia\LaravelClient\Exceptions\LogliaException;
-
 class MemoryTransport implements TransportInterface
 {
     /**
@@ -11,13 +9,8 @@ class MemoryTransport implements TransportInterface
      */
     public $logs = [];
 
-    public function send(string $log)
+    public function send(array $logs)
     {
-        $this->logs[] = $log;
-    }
-
-    public function close()
-    {
-        $this->logs = [];
+        $this->logs = $logs;
     }
 }
