@@ -15,8 +15,7 @@ The Loglia client requires the following be installed and available on your syst
 
 - Laravel 5.4+
 - PHP 7.0+
-- PHP JSON extension
-- PHP sockets extension
+- PHP cURL extension
 
 ## Quick start
 
