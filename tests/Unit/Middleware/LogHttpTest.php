@@ -1,6 +1,6 @@
 <?php
 
-namespace Loglia\LaravelClient\Tests\Unit\Monolog;
+namespace Loglia\LaravelClient\Tests\Unit\Middleware;
 
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class LogHttpTest extends TestCase
      */
     private $middleware;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

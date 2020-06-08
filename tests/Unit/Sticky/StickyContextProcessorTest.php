@@ -8,7 +8,7 @@ use Loglia\LaravelClient\Sticky\StickyContextProcessor;
 
 class StickyContextProcessorTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         // Clear the sticky context before each test run.
         StickyContext::clear();

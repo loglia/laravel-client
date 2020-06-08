@@ -19,7 +19,7 @@ class LogliaHandlerTest extends TestCase
      */
     private $handler;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -19,7 +19,12 @@ class LogliaHandler extends AbstractProcessingHandler
         $this->transport = $transport;
     }
 
-    public function handleBatch(array $records)
+    public function isHandling(array $record): bool
+    {
+        return true;
+    }
+
+    public function handleBatch(array $records): void
     {
         foreach ($records as $index => $record) {
             if (!$this->isHandling($record)) {
@@ -35,8 +40,8 @@ class LogliaHandler extends AbstractProcessingHandler
         $this->transport->send($records);
     }
 
-    public function write(array $record)
+    public function write(array $record): void
     {
-        // TODO: this method is not needed, perhaps we don't need to extend AbstractHandler?
+        // Never used, but requires a definition due to AbstractProcessingHandler.
     }
 }
