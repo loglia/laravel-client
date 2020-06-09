@@ -5,7 +5,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-json": "*",
         "ext-curl": "*",
         "illuminate/support": "^6.0|^7.0",
@@ -13,7 +13,7 @@
         "ramsey/uuid": "^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^8.0",
         "mockery/mockery": "^1.2",
         "orchestra/testbench": "^4.0"
     },
