@@ -8,7 +8,7 @@
         "php": "^7.2",
         "ext-json": "*",
         "ext-curl": "*",
-        "illuminate/support": "^6.0|^7.0",
+        "illuminate/support": "^6.0|^7.0|^8.0",
         "monolog/monolog": "^2.0",
         "ramsey/uuid": "^3.0"
     },
